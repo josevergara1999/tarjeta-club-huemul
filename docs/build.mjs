@@ -70,6 +70,6 @@ const cabeza = [
   '<script>' + supp + '</script>',
 ].join('\n')
 
-const out = SC + '/tarjeta-club-huemul.html'
+const out = SC + '/index.html'
 writeFileSync(out, cabeza + '\n' + doc + '\n')
 console.log('\n' + basename(out) + '  ' + Math.round(readFileSync(out).length / 1024) + ' KB')

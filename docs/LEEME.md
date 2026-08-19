@@ -1,6 +1,6 @@
-# publicar/
+# docs/ — la carpeta que se publica
 
-`tarjeta-club-huemul.html` es el prototipo entero en UN archivo: el mismo diseño,
+`index.html` es el prototipo entero en UN archivo: el mismo diseño,
 con el runtime, el marco de iPhone y las imágenes metidos dentro. Se genera, no se
 edita a mano — lo que se edita es `../project/`.
 
@@ -22,3 +22,6 @@ Para regenerarlo hace falta node, ImageMagick y bajar tres librerías:
 
 Del diseño solo se cambian las rutas de las imágenes por la imagen misma. Ni una
 línea de layout, color o lógica.
+
+GitHub Pages sirve esta carpeta tal cual: cada `git push` a `main` actualiza
+https://josevergara1999.github.io/tarjeta-club-huemul/ en un par de minutos.
