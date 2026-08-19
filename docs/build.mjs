@@ -78,6 +78,10 @@ const cabeza = [
   // acentos salen rotos ("FIDELIZACION" con basura). El prescan solo mira los
   // primeros 1024 bytes, asi que va antes que cualquier libreria.
   '<meta charset="utf-8">',
+  // Tan imprescindible como el charset, y por el mismo motivo: venia en el <head>
+  // original. Sin ella Safari maqueta a 980px de ancho y luego encoge la pagina,
+  // asi que la regla de movil de abajo no llega a aplicarse nunca.
+  '<meta name="viewport" content="width=device-width, initial-scale=1">',
   '<title>Tarjeta Club Huemul</title>',
   '<script>' + lib('react.js') + '</script>',
   '<script>' + lib('react-dom.js') + '</script>',
