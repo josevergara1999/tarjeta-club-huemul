@@ -55,6 +55,24 @@ const lib  = n => readFileSync(SC + '/lib/' + n, 'utf8')
 const jsx  = readFileSync(P + '/ios-frame.jsx', 'utf8')
 const supp = readFileSync(P + '/support.js', 'utf8')
 
+// En un telefono, el marco de iPhone del prototipo se dibuja DENTRO del telefono:
+// un mockup, no la app. Ahi el marco sobra — y la barra de estado falsa queda
+// debajo de la de verdad, doblada. Asi que en pantallas chicas el marco se suelta
+// del contenedor y ocupa todo, y se esconden isla, barra de estado e indicador.
+// Solo afecta a la presentacion: el diseno de project/ no cambia.
+const CSS_MOVIL = `
+@media (max-width: 820px) {
+  html, body { overflow: hidden; }
+  [data-om-starter="ios-frame"] {
+    position: fixed !important; inset: 0 !important;
+    width: auto !important; height: auto !important;
+    border-radius: 0 !important; box-shadow: none !important;
+  }
+  [data-om-starter="ios-frame"] > div:nth-child(1),
+  [data-om-starter="ios-frame"] > div:nth-child(2),
+  [data-om-starter="ios-frame"] > div:nth-child(4) { display: none !important; }
+}`
+
 const cabeza = [
   // Primero de todo: sin esto el navegador lee el UTF-8 como latin-1 y los
   // acentos salen rotos ("FIDELIZACION" con basura). El prescan solo mira los
@@ -68,6 +86,7 @@ const cabeza = [
   '<script>window.__resources={};window.__resourceBlobs={"./ios-frame.jsx":new Blob([' +
     JSON.stringify(jsx) + '],{type:"text/jsx"})};</script>',
   '<script>' + supp + '</script>',
+  '<style>' + CSS_MOVIL + '</style>',
 ].join('\n')
 
 const out = SC + '/index.html'
