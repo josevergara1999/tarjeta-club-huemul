@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;family=Jost:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#aca192}
+a{color:#5a3540}a:hover{color:#3a2128}
+input{outline:none}
+input::placeholder{color:rgba(90,60,70,.32);font-weight:300}
+input[type="date"]{color-scheme:light}
+@keyframes hm-fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes hm-rise{from{opacity:0;transform:translateY(30px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes hm-sheen{0%{background-position:200% 0}100%{background-position:-100% 0}}
+@keyframes hm-chev{0%,100%{transform:rotate(-45deg) translate(0,0);opacity:.4}50%{transform:rotate(-45deg) translate(-4px,-4px);opacity:1}}
+@keyframes hm-pop{0%{transform:scale(2.3) rotate(-16deg);opacity:0}55%{transform:scale(.9) rotate(3deg);opacity:1}100%{transform:scale(1) rotate(0deg);opacity:1}}
+@keyframes hm-glow{0%,100%{opacity:.65}50%{opacity:1}}
+@keyframes hm-fadeIn{from{opacity:0}to{opacity:1}}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px;box-sizing:border-box;background:radial-gradient(120% 100% at 50% 0%,#c3b9ab,#a99e8e)">
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="position:relative;width:100%;height:100%;background:radial-gradient(140% 90% at 50% 6%,#d9d1c5 0%,#cbc2b6 55%,#bcb1a2 100%);font-family:Jost,sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none">
+
+<sc-if value="{{ isIntro }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Registro" style="position:absolute;inset:0;display:flex;flex-direction:column;padding:96px 36px 42px;box-sizing:border-box">
+  <div style="width:58px;height:58px;background:#5a3540;color:#efe6d8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12.5px;font-weight:500;letter-spacing:2.5px;border-radius:2px;box-shadow:0 12px 28px rgba(58,33,40,.28);animation:hm-fadeUp .7s both"><span style="padding-left:2.5px">HUE</span><span style="padding-left:2.5px">MUL</span></div>
+  <div style="font-family:Jost,sans-serif;font-weight:300;font-size:25px;letter-spacing:.34em;text-transform:uppercase;color:#38242b;margin-top:28px;animation:hm-fadeUp .7s .08s both">Club Huemul</div>
+  <div style="font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#8a7566;margin-top:8px;animation:hm-fadeUp .7s .14s both">Programa de fidelización</div>
+  <p style="font-size:14px;font-weight:300;line-height:1.6;color:#6d6157;margin:18px 0 0;max-width:280px;animation:hm-fadeUp .7s .2s both;text-wrap:pretty">Crea tu tarjeta personal del restaurante. Tu nombre quedará grabado en ella.</p>
+  <div style="display:flex;flex-direction:column;gap:24px;margin-top:auto;animation:hm-fadeUp .7s .26s both">
+    <label style="display:flex;flex-direction:column;gap:6px">
+      <span style="font-size:10.5px;letter-spacing:2.2px;text-transform:uppercase;color:#8a7566">Nombre y apellido</span>
+      <input type="text" value="{{ name }}" onChange="{{ onName }}" placeholder="Valentina Rojas" style="background:transparent;border:none;border-bottom:1px solid rgba(90,60,70,.3);padding:9px 2px;font-size:17px;font-family:Jost,sans-serif;font-weight:400;color:#3a262d;border-radius:0" style-focus="border-bottom-color:#5a3540">
+    </label>
+    <label style="display:flex;flex-direction:column;gap:6px">
+      <span style="font-size:10.5px;letter-spacing:2.2px;text-transform:uppercase;color:#8a7566">Correo electrónico</span>
+      <input type="email" value="{{ email }}" onChange="{{ onEmail }}" placeholder="valentina@correo.com" style="background:transparent;border:none;border-bottom:1px solid rgba(90,60,70,.3);padding:9px 2px;font-size:17px;font-family:Jost,sans-serif;font-weight:400;color:#3a262d;border-radius:0" style-focus="border-bottom-color:#5a3540">
+    </label>
+    <label style="display:flex;flex-direction:column;gap:6px">
+      <span style="font-size:10.5px;letter-spacing:2.2px;text-transform:uppercase;color:#8a7566">Fecha de nacimiento</span>
+      <input type="date" value="{{ dob }}" onChange="{{ onDob }}" style="background:transparent;border:none;border-bottom:1px solid rgba(90,60,70,.3);padding:9px 2px;font-size:16px;font-family:Jost,sans-serif;font-weight:400;color:#3a262d;border-radius:0" style-focus="border-bottom-color:#5a3540">
+    </label>
+    <button onClick="{{ submit }}" style="{{ submitStyle }}">Crear mi tarjeta</button>
+    <div style="font-size:11px;font-weight:300;color:rgba(109,97,87,.65);text-align:center;margin-top:-8px">Tus datos solo se usan para personalizar tu tarjeta.</div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isSelect }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Selector de tarjeta" ref="{{ selRef }}" style="position:absolute;inset:0;display:flex;flex-direction:column">
+  <div style="padding-top:76px;text-align:center;animation:hm-fadeUp .6s both">
+    <div style="display:inline-flex;width:40px;height:40px;border-radius:50%;background:#5a3540;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(58,33,40,.25)"><img src="assets/emblem-alpha.png" alt="" style="width:27px;height:27px"></div>
+    <div style="font-family:Jost,sans-serif;font-weight:300;font-size:19px;letter-spacing:.32em;text-transform:uppercase;color:#38242b;margin-top:12px">Elige tu tarjeta</div>
+    <div style="font-size:12.5px;font-weight:300;color:#7d6f63;margin-top:4px;letter-spacing:.4px">Desliza para explorar los diseños</div>
+  </div>
+  <div ref="{{ carRef }}" style="position:relative;flex:1;perspective:1300px;touch-action:none">
+    <div style="{{ groundShadowStyle }}"></div>
+    <div style="{{ ghostStyle }}"></div>
+    <div style="{{ haloStyle }}"></div>
+    <sc-for list="{{ cardItems }}" as="it" hint-placeholder-count="0">
+      <div style="{{ it.style }}" onPointerDown="{{ it.onDown }}">
+        <div style="{{ it.ch.logo }}"><span>HUE</span><span>MUL</span></div>
+        <img src="assets/stamp-c6.png" alt="" style="{{ it.ch.emb }}">
+        <div style="{{ it.ch.club }}">CLUB HUEMUL<div style="font-family:'Cormorant Garamond',serif;font-size:.98em;letter-spacing:.22em;text-transform:lowercase;margin-top:3px;opacity:.88">Fidelización</div></div>
+        <span style="{{ it.engraveStyle }}">{{ it.holder }}</span>
+        <div style="position:absolute;inset:0;border-radius:16px;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.13),rgba(255,255,255,0) 40%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)"></div>
+      </div>
+    </sc-for>
+  </div>
+  <div style="text-align:center;height:30px">
+    <span style="font-family:'Cormorant Garamond',serif;font-size:17px;letter-spacing:.2em;text-transform:lowercase;color:#4a3138">{{ selName }}</span>
+    <span style="font-size:11.5px;color:#8a7566;margin-left:10px;letter-spacing:1px">{{ selCount }}</span>
+  </div>
+  <div style="{{ chevWrapStyle }}">
+    <div style="width:11px;height:11px;border-left:2px solid #6b4450;border-bottom:2px solid #6b4450;transform:rotate(-45deg);animation:hm-chev 1.7s ease-in-out infinite"></div>
+    <div style="width:11px;height:11px;border-left:2px solid #6b4450;border-bottom:2px solid #6b4450;transform:rotate(-45deg);animation:hm-chev 1.7s ease-in-out .18s infinite"></div>
+  </div>
+  <div style="position:relative;height:148px;background:linear-gradient(180deg,#3a2128,#2a161c);border-radius:30px 30px 0 0;box-shadow:0 -18px 44px rgba(43,23,29,.38);display:flex;flex-direction:column;align-items:center;padding-top:28px;box-sizing:border-box;z-index:120">
+    <div style="{{ slotStyle }}"></div>
+    <div style="margin-top:20px;font-size:11.5px;letter-spacing:2.6px;text-transform:uppercase;color:rgba(236,227,211,.68)">{{ dockLabel }}</div>
+    <div style="margin-top:7px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(236,227,211,.32)">Lector · Club Huemul</div>
+  </div>
+  <sc-if value="{{ dockCopyOn }}" hint-placeholder-val="{{ false }}">
+  <div style="{{ dockClipStyle }}">
+    <div style="{{ dockCardStyle }}">
+      <div style="{{ dockCh.logo }}"><span>HUE</span><span>MUL</span></div>
+      <img src="assets/stamp-c6.png" alt="" style="{{ dockCh.emb }}">
+      <div style="{{ dockCh.club }}">CLUB HUEMUL<div style="font-family:'Cormorant Garamond',serif;font-size:.98em;letter-spacing:.22em;text-transform:lowercase;margin-top:3px;opacity:.88">Fidelización</div></div>
+      <span style="{{ dockEngrave }}">{{ holder }}</span>
+      <div style="position:absolute;inset:0;border-radius:16px;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.13),rgba(255,255,255,0) 40%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)"></div>
+    </div>
+  </div>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isCelebrate }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Celebración" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;padding:82px 30px 38px;box-sizing:border-box">
+  <div style="font-size:11px;letter-spacing:3.5px;text-transform:uppercase;color:#a3814f;animation:hm-fadeUp .6s .1s both">Regalo de bienvenida</div>
+  <div style="font-family:Jost,sans-serif;font-weight:300;font-size:22px;letter-spacing:.3em;text-transform:uppercase;color:#38242b;margin-top:10px;animation:hm-fadeUp .6s .18s both;text-align:center">Bienvenido, {{ firstName }}</div>
+  <div style="position:relative;margin-top:24px;animation:hm-rise .85s .25s cubic-bezier(.22,1,.36,1) both">
+    <div style="position:absolute;inset:-34px;background:radial-gradient(closest-side,rgba(212,182,120,.4),rgba(212,182,120,0));border-radius:50%;animation:hm-glow 2.6s ease-in-out infinite"></div>
+    <div style="{{ celTiltStyle }}" onPointerMove="{{ celMove }}" onPointerLeave="{{ celLeave }}">
+      <sc-if value="{{ chosenReady }}" hint-placeholder-val="{{ false }}"><img src="{{ chosenImg }}" alt="" style="{{ celImgStyle }}"></sc-if>
+      <div style="{{ celCh.logo }}"><span>HUE</span><span>MUL</span></div>
+      <img src="assets/stamp-c6.png" alt="" style="{{ celCh.emb }}">
+      <div style="{{ celCh.club }}">CLUB HUEMUL<div style="font-family:'Cormorant Garamond',serif;font-size:.98em;letter-spacing:.22em;text-transform:lowercase;margin-top:3px;opacity:.88">Fidelización</div></div>
+      <span style="{{ celEngrave }}">{{ holder }}</span>
+      <div style="{{ celShine }}"></div>
+      <div style="position:absolute;inset:0;border-radius:17px;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,0) 38%,rgba(255,255,255,.38) 50%,rgba(255,255,255,0) 62%);background-size:230% 100%;animation:hm-sheen 2.9s ease-in-out .5s 2 both"></div>
+      <div style="position:absolute;inset:0;border-radius:17px;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)"></div>
+    </div>
+  </div>
+  <div style="margin-top:auto;text-align:center;animation:hm-fadeUp .7s .9s both;width:100%">
+    <div style="width:44px;height:1px;background:rgba(90,60,70,.35);margin:0 auto"></div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:21px;letter-spacing:.16em;text-transform:lowercase;color:#38242b;margin-top:14px">Espumante de cortesía</div>
+    <div style="font-size:12.5px;font-weight:300;color:#6d6157;margin-top:5px;line-height:1.5">Por tu primer escaneo · preséntala en tu próxima visita</div>
+    <button onClick="{{ toHome }}" style="margin-top:20px;width:100%;padding:16px;border-radius:999px;border:none;background:#4a2b33;color:#ece3d3;font-family:Jost,sans-serif;font-size:13px;letter-spacing:2.2px;text-transform:uppercase;cursor:pointer;box-shadow:0 14px 30px -8px rgba(58,33,40,.5)">Ver mi tarjeta</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Mi tarjeta" ref="{{ homeRef }}" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;padding:64px 26px 124px;box-sizing:border-box">
+  <div style="display:flex;align-items:center;gap:12px;width:100%;animation:hm-fadeUp .5s both">
+    <div style="width:36px;height:36px;background:#5a3540;color:#efe6d8;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:7.5px;font-weight:500;letter-spacing:1.6px;border-radius:2px"><span style="padding-left:1.5px">HUE</span><span style="padding-left:1.5px">MUL</span></div>
+    <div style="display:flex;flex-direction:column;gap:1px">
+      <span style="font-size:12.5px;font-weight:500;letter-spacing:2.4px;color:#38242b">CLUB HUEMUL</span>
+      <span style="font-size:11px;font-weight:300;color:#8a7566">{{ memberLine }}</span>
+    </div>
+  </div>
+  <div ref="{{ cardWrapRef }}" style="perspective:1500px;width:250px;height:408px;margin-top:16px;cursor:pointer;animation:hm-rise .7s .1s both;touch-action:none;position:relative;z-index:1" onClick="{{ flip }}" onPointerDown="{{ visitDown }}" onPointerMove="{{ homeMove }}" onPointerLeave="{{ homeLeave }}">
+    <div style="{{ homeTiltStyle }}">
+    <div style="{{ flipInnerStyle }}">
+      <div style="position:absolute;inset:0;border-radius:18px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 30px 56px -18px rgba(40,22,28,.5)">
+        <sc-if value="{{ chosenReady }}" hint-placeholder-val="{{ false }}"><img src="{{ chosenImg }}" alt="" style="{{ homeImgStyle }}"></sc-if>
+        <div style="{{ homeCh.logo }}"><span>HUE</span><span>MUL</span></div>
+        <img src="assets/stamp-c6.png" alt="" style="{{ homeCh.emb }}">
+        <div style="{{ homeCh.club }}">CLUB HUEMUL<div style="font-family:'Cormorant Garamond',serif;font-size:.98em;letter-spacing:.22em;text-transform:lowercase;margin-top:3px;opacity:.88">Fidelización</div></div>
+        <span style="{{ homeEngrave }}">{{ holder }}</span>
+        <div style="{{ homeShine }}"></div>
+        <sc-if value="{{ qr }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:178px;padding:13px 13px 9px;box-sizing:border-box;background:rgba(242,235,221,.95);border:1px solid rgba(212,182,120,.85);border-radius:14px;box-shadow:inset 0 1px 4px rgba(58,33,40,.28), 0 12px 28px rgba(20,8,12,.5);animation:hm-fadeIn .4s both">
+          <span onClick="{{ qrClose }}" style="position:absolute;top:-11px;right:-11px;width:28px;height:28px;border-radius:50%;background:#4a2b33;color:#ece3d3;display:flex;align-items:center;justify-content:center;font-size:13px;font-family:Jost,sans-serif;cursor:pointer;box-shadow:0 4px 10px rgba(20,8,12,.5)">✕</span>
+          <canvas ref="{{ qrRef }}" width="220" height="220" style="width:150px;height:150px;display:block;border-radius:6px"></canvas>
+          <div style="font-family:Jost,sans-serif;font-size:8.5px;letter-spacing:2.2px;text-transform:uppercase;color:#6d5560;text-align:center;margin-top:7px">{{ qrLine }}</div>
+        </div>
+        </sc-if>
+        <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.12),rgba(255,255,255,0) 40%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)"></div>
+      </div>
+      <div style="position:absolute;inset:0;border-radius:18px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:rotateY(180deg);background:linear-gradient(160deg,#4c2c35,#311a21);box-shadow:0 30px 56px -18px rgba(40,22,28,.5);display:flex;flex-direction:column;padding:22px;box-sizing:border-box">
+        <div style="display:flex;align-items:center;gap:10px">
+          <img src="assets/emblem-alpha.png" alt="" style="width:28px;height:28px;opacity:.9">
+          <span style="font-size:10px;letter-spacing:2.6px;color:rgba(236,227,211,.7)">CLUB HUEMUL</span>
+        </div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:20px;letter-spacing:.18em;text-transform:lowercase;color:#ece3d3;margin-top:16px">Estampillas</div>
+        <div style="font-size:11px;font-weight:300;color:rgba(236,227,211,.55);margin-top:3px;line-height:1.5">{{ goalLine }}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:13px;margin-top:18px;justify-content:center">
+          <sc-for list="{{ stampItems }}" as="st" hint-placeholder-count="5">
+            <div style="{{ st.style }}">
+              <div style="{{ st.imgStyle }}"></div>
+              <span style="{{ st.numStyle }}">{{ st.num }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:auto">
+          <div style="height:3px;border-radius:2px;background:rgba(236,227,211,.14);overflow:hidden">
+            <div style="{{ progressBarStyle }}"></div>
+          </div>
+          <div style="font-size:11px;color:rgba(236,227,211,.6);margin-top:8px">{{ progressLine }}</div>
+          <div style="display:flex;justify-content:space-between;margin-top:14px">
+            <span style="font-size:9.5px;letter-spacing:2px;color:rgba(236,227,211,.5)">{{ holderCaps }}</span>
+            <span style="font-size:9.5px;letter-spacing:2px;color:rgba(236,227,211,.35)">MIEMBRO 2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+  <div style="font-size:11px;font-weight:300;color:#8a7566;margin-top:14px;letter-spacing:.5px;animation:hm-fadeUp .6s .3s both">{{ flipHint }}</div>
+  <div style="margin-top:auto;width:100%;display:flex;flex-direction:column;align-items:center;gap:12px;padding-bottom:4px">
+    <sc-if value="{{ demoScanOn }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ simulateScan }}" style="padding:12px 30px;border-radius:999px;border:1px solid rgba(163,129,79,.8);background:transparent;color:#4a2b33;font-family:Jost,sans-serif;font-size:11.5px;letter-spacing:2.2px;text-transform:uppercase;cursor:pointer;animation:hm-fadeUp .4s both">Simular escáner</button>
+    </sc-if>
+    <span onClick="{{ reset }}" style="font-size:10.5px;color:rgba(90,60,70,.5);text-decoration:underline;cursor:pointer">Reiniciar demo</span>
+  </div>
+  <div style="position:absolute;left:0;right:0;bottom:0;height:112px;background:linear-gradient(180deg,#3a2128,#2a161c);border-radius:30px 30px 0 0;box-shadow:0 -16px 40px rgba(43,23,29,.35);display:flex;flex-direction:column;align-items:center;padding-top:22px;box-sizing:border-box;z-index:140">
+    <div style="{{ vSlotStyle }}"></div>
+    <div style="margin-top:16px;font-size:10.5px;letter-spacing:2.4px;text-transform:uppercase;color:rgba(236,227,211,.68);text-align:center;padding:0 20px">{{ vDockLabel }}</div>
+  </div>
+  <sc-if value="{{ vCopyOn }}" hint-placeholder-val="{{ false }}">
+  <div style="{{ vClipStyle }}">
+    <div style="{{ vCardStyle }}">
+      <div style="{{ vCh.logo }}"><span>HUE</span><span>MUL</span></div>
+      <img src="assets/stamp-c6.png" alt="" style="{{ vCh.emb }}">
+      <div style="{{ vCh.club }}">CLUB HUEMUL<div style="font-family:'Cormorant Garamond',serif;font-size:.98em;letter-spacing:.22em;text-transform:lowercase;margin-top:3px;opacity:.88">Fidelización</div></div>
+      <span style="{{ vEngrave }}">{{ holder }}</span>
+      <div style="position:absolute;inset:0;border-radius:18px;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.13),rgba(255,255,255,0) 40%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)"></div>
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+</sc-if>
+
+<sc-if value="{{ reward }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Recompensa" style="position:absolute;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(43,23,29,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);animation:hm-fadeUp .45s both">
+  <div style="width:296px;background:#efe7d9;border-radius:22px;padding:32px 28px;box-sizing:border-box;text-align:center;box-shadow:0 40px 80px -20px rgba(20,10,13,.6);animation:hm-rise .6s .1s cubic-bezier(.22,1,.36,1) both">
+    <div style="display:inline-flex;width:46px;height:46px;border-radius:50%;background:#5a3540;align-items:center;justify-content:center"><img src="assets/emblem-alpha.png" alt="" style="width:30px;height:30px"></div>
+    <div style="font-size:10.5px;letter-spacing:3px;text-transform:uppercase;color:#a3814f;margin-top:14px">Colección completa</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:23px;letter-spacing:.14em;text-transform:lowercase;color:#38242b;margin-top:8px;line-height:1.3">Un postre a tu elección</div>
+    <div style="font-size:12.5px;font-weight:300;color:#6d6157;margin-top:10px;line-height:1.55;text-wrap:pretty">Cortesía de la casa por completar tus {{ reqStamps }} visitas. Muéstralo en tu mesa para canjearlo.</div>
+    <button onClick="{{ redeem }}" style="margin-top:22px;width:100%;padding:15px;border-radius:999px;border:none;background:#4a2b33;color:#ece3d3;font-family:Jost,sans-serif;font-size:12.5px;letter-spacing:2.2px;text-transform:uppercase;cursor:pointer">Canjear en mi visita</button>
+  </div>
+</div>
+</sc-if>
+
+<canvas ref="{{ confRef }}" style="position:absolute;inset:0;z-index:300;pointer-events:none"></canvas>
+</div>
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 480, &quot;height&quot;: 950}, &quot;requiredStamps&quot;: {&quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 5, &quot;min&quot;: 3, &quot;max&quot;: 8, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Fidelización&quot;}, &quot;showDemo&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Demo&quot;}}">
+class Component extends DCLogic {
+  KEY = 'huemul_club_v1';
+  confRef = React.createRef();
+  carRef = React.createRef();
+  selRef = React.createRef();
+  homeRef = React.createRef();
+  cardWrapRef = React.createRef();
+  qrRef = React.createRef();
+  cards = [
+    { id: 'cordillera', name: 'Cordillera', img: 'assets/new-0925.png', light: false, emblem: true },
+    { id: 'huemul', name: 'Huemul', img: 'assets/new-0845.png', light: true, emblem: false },
+    { id: 'laurel', name: 'Laurel', img: 'assets/new-0913.png', light: false, emblem: true },
+    { id: 'topografia', name: 'Topografía', img: 'assets/new-0859.png', light: false, emblem: true },
+    { id: 'acuarela', name: 'Acuarela', img: 'assets/new-0823.png', light: false, emblem: false },
+  ];
+  state = { phase: 'intro', name: '', email: '', dob: '', sel: 1, dx: 0, dy: 0, dragging: false, mode: null, docking: false, pressed: false, dockCopy: null, dockAnim: false, flipped: false, stamps: 0, justStamped: -1, reward: false, tc: { x: 0, y: 0, on: false }, th: { x: 0, y: 0, on: false }, vdy: 0, vDragging: false, vPhase: null, vCopy: null, vAnim: null, qr: false };
+
+  componentDidUpdate(pp, ps) {
+    const was = ps && ps.qr;
+    if (!was && this.state.qr && !this._qrShown) { this._qrShown = true; requestAnimationFrame(() => this.drawQR()); }
+    if (!this.state.qr) this._qrShown = false;
+  }
+
+  startVisitDrag(e) {
+    if (this.state.phase !== 'home' || this.state.qr || this.state.reward || this.state.vPhase || this.state.vAnim || this.state.vCopy) return;
+    e.preventDefault();
+    this._vdrag = { y0: e.clientY, x0: e.clientX, started: false };
+    this._vmv = ev => this.visitMove(ev); this._vup = () => this.visitEnd();
+    window.addEventListener('pointermove', this._vmv); window.addEventListener('pointerup', this._vup); window.addEventListener('pointercancel', this._vup);
+  }
+  visitMove(ev) {
+    const d = this._vdrag; if (!d) return;
+    const dy = ev.clientY - d.y0, dx = ev.clientX - d.x0;
+    if (!d.started) { if (dy > 8 && dy > Math.abs(dx)) { d.started = true; this._vMoved = true; } else return; }
+    if (!this.state.vCopy) {
+      let x = 76, y = 160, dIn = 300;
+      try {
+        const cr = this.cardWrapRef.current.getBoundingClientRect();
+        const rr = this.homeRef.current.getBoundingClientRect();
+        this._vRootH = rr.height;
+        x = cr.left - rr.left; y = cr.top - rr.top;
+        dIn = (rr.height - 84) - cr.height * 0.5 - y;
+      } catch (e) {}
+      this.setState({ vCopy: { x, y, dIn, dOut: 0 } });
+    }
+    this.setState({ vdy: Math.max(0, dy * 0.95), vDragging: true, th: { x: 0, y: 0, on: false } });
+  }
+  visitEnd() {
+    if (this._vmv) { window.removeEventListener('pointermove', this._vmv); window.removeEventListener('pointerup', this._vup); window.removeEventListener('pointercancel', this._vup); this._vmv = null; }
+    const d = this._vdrag; this._vdrag = null;
+    if (!d || !d.started) return;
+    if (this.state.vdy > 170) this.insertVisit();
+    else {
+      this.setState({ vAnim: 'back', vDragging: false });
+      setTimeout(() => this.setState({ vCopy: null, vAnim: null, vdy: 0 }), 500);
+    }
+    setTimeout(() => { this._vMoved = false; }, 300);
+  }
+  insertVisit() {
+    if (!this.state.vCopy) return;
+    this.setState({ vPhase: 'in', vDragging: false, vAnim: 'in' });
+    setTimeout(() => this.setState({ vAnim: 'out', vPhase: 'out' }), 720);
+    setTimeout(() => this.setState({ vPhase: null, vAnim: null, vCopy: null, vdy: 0, qr: true }), 1620);
+  }
+  simulateScan() {
+    this.setState({ qr: false });
+    setTimeout(() => {
+      if (this.state.stamps >= this.req()) this.setState({ reward: true });
+      else this.addStamp();
+    }, 260);
+  }
+  drawQR(tries) {
+    const cv = this.qrRef.current;
+    if (!cv) { if ((tries || 0) < 25) setTimeout(() => this.drawQR((tries || 0) + 1), 60); return; }
+    const qi = this._qrImg || (this._qrImg = new Image());
+    if (!qi.complete || !qi.naturalWidth) {
+      qi.onload = () => this.drawQR();
+      if (!qi.src) qi.src = 'assets/qr-real.png';
+      return;
+    }
+    const o = document.createElement('canvas'); o.width = 220; o.height = 220;
+    const oc = o.getContext('2d');
+    oc.fillStyle = '#f6f1e6'; oc.fillRect(0, 0, 220, 220);
+    oc.imageSmoothingEnabled = false;
+    oc.drawImage(qi, 6, 6, 208, 208);
+    // grabado línea por línea
+    const ctx = cv.getContext('2d');
+    cancelAnimationFrame(this._qra);
+    const t0 = performance.now(), dur = 1350;
+    const tick = t => {
+      const p = Math.min(1, (t - t0) / dur);
+      const e = 1 - Math.pow(1 - p, 2.1);
+      const hRev = Math.round(e * 220);
+      ctx.clearRect(0, 0, 220, 220);
+      ctx.fillStyle = '#f6f1e6'; ctx.fillRect(0, 0, 220, 220);
+      if (hRev > 0) ctx.drawImage(o, 0, 0, 220, hRev, 0, 0, 220, hRev);
+      if (p < 1) {
+        const g = ctx.createLinearGradient(0, hRev - 16, 0, hRev + 2);
+        g.addColorStop(0, 'rgba(212,182,120,0)'); g.addColorStop(1, 'rgba(193,154,85,.7)');
+        ctx.fillStyle = g; ctx.fillRect(0, Math.max(0, hRev - 16), 220, 18);
+        ctx.fillStyle = 'rgba(244,214,150,.95)'; ctx.fillRect(0, hRev, 220, 2.5);
+        this._qra = requestAnimationFrame(tick);
+      }
+    };
+    this._qra = requestAnimationFrame(tick);
+  }
+
+  tiltMove(key, e) {
+    if (this._vdrag) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    this.setState({ [key]: { x: Math.max(-.5, Math.min(.5, x)), y: Math.max(-.5, Math.min(.5, y)), on: true } });
+  }
+  tiltEnd(key) { this.setState({ [key]: { x: 0, y: 0, on: false } }); }
+  tTrans(t) { return t.on ? 'transform .09s ease-out' : 'transform .65s cubic-bezier(.22,1,.36,1)'; }
+
+  req() { return Math.min(8, Math.max(3, this.props.requiredStamps ?? 5)); }
+
+  componentDidMount() {
+    this.cards.forEach(c => { const im = new Image(); im.src = c.img; });
+    this._qrImg = new Image(); this._qrImg.src = 'assets/qr-real.png';
+    try {
+      const s = JSON.parse(localStorage.getItem(this.KEY) || 'null');
+      if (s && s.done) this.setState({ phase: 'home', sel: s.sel || 0, name: s.name || '', email: s.email || '', dob: s.dob || '', stamps: Math.min(s.stamps || 0, this.req()) });
+    } catch (e) {}
+  }
+  componentWillUnmount() { this.rmListeners(); cancelAnimationFrame(this._cf); cancelAnimationFrame(this._qra); }
+
+  persist(extra) {
+    const { sel, name, email, dob, stamps } = this.state;
+    try { localStorage.setItem(this.KEY, JSON.stringify(Object.assign({ done: true, sel, name, email, dob, stamps }, extra || {}))); } catch (e) {}
+  }
+
+  rmListeners() {
+    if (this._mv) { window.removeEventListener('pointermove', this._mv); window.removeEventListener('pointerup', this._up); window.removeEventListener('pointercancel', this._up); this._mv = null; }
+  }
+  startCardDrag(i, e) {
+    if (this.state.phase !== 'select' || this.state.docking || this.state.dockAnim) return;
+    e.preventDefault();
+    this._drag = { i, x0: e.clientX, y0: e.clientY, mode: null };
+    this._mv = ev => this.dragMove(ev); this._up = () => this.dragEnd();
+    window.addEventListener('pointermove', this._mv); window.addEventListener('pointerup', this._up); window.addEventListener('pointercancel', this._up);
+    this.setState({ dragging: true, dx: 0, dy: 0, mode: null, pressed: i === this.state.sel });
+  }
+  dragMove(ev) {
+    const d = this._drag; if (!d) return;
+    const dx = ev.clientX - d.x0, dy = ev.clientY - d.y0;
+    if (!d.mode) {
+      if (Math.hypot(dx, dy) < 9) return;
+      d.mode = (dy > Math.abs(dx) * 1.1 && d.i === this.state.sel) ? 'pull' : 'swipe';
+    }
+    if (d.mode === 'swipe') {
+      let x = dx;
+      const { sel } = this.state;
+      if ((sel === 0 && x > 0) || (sel === this.cards.length - 1 && x < 0)) x *= 0.35;
+      this.setState({ dx: x, dy: 0, mode: 'swipe', pressed: false });
+    } else {
+      if (!this.state.dockCopy) {
+        let x = 92, y = 260;
+        try {
+          const cr = this.carRef.current.getBoundingClientRect();
+          const rr = this.selRef.current.getBoundingClientRect();
+          this._rootH = rr.height; this._rootW = rr.width;
+          x = cr.left - rr.left + cr.width / 2 - 103;
+          y = cr.top - rr.top + cr.height / 2 - 168;
+        } catch (e) { this._rootH = 874; this._rootW = 402; }
+        this.setState({ dockCopy: { x, y } });
+      }
+      this.setState({ dy: Math.max(0, dy), dx: dx * 0.25, mode: 'pull' });
+    }
+  }
+  dragEnd() {
+    this.rmListeners();
+    const d = this._drag; this._drag = null;
+    const { dx, dy, sel, mode } = this.state;
+    if (mode === 'pull' && dy > 200) { this.dock(); return; }
+    if (mode === 'pull') {
+      this.setState({ dockAnim: 'back', dragging: false, pressed: false });
+      setTimeout(() => this.setState({ dockCopy: null, dockAnim: null, dx: 0, dy: 0, mode: null }), 500);
+      return;
+    }
+    let ns = sel;
+    if (mode === 'swipe') {
+      let mv = Math.round(-dx / 170);
+      if (mv === 0 && Math.abs(dx) > 55) mv = dx < 0 ? 1 : -1;
+      ns = Math.min(this.cards.length - 1, Math.max(0, sel + mv));
+    } else if (d && d.mode == null && d.i !== sel) ns = d.i;
+    this.setState({ sel: ns, dx: 0, dy: 0, dragging: false, mode: null, pressed: false });
+  }
+  dock() {
+    this.setState({ docking: true, dragging: false, mode: 'pull', pressed: false });
+    requestAnimationFrame(() => requestAnimationFrame(() => this.setState({ dockAnim: 'in' })));
+    setTimeout(() => {
+      this.persist({ stamps: 0 });
+      this.setState({ phase: 'celebrate', docking: false, dockCopy: null, dockAnim: null, dy: 0, dx: 0, mode: null });
+      setTimeout(() => this.startConfetti(4200), 250);
+    }, 1030);
+  }
+
+  startConfetti(dur) {
+    const cv = this.confRef.current; if (!cv) return;
+    const wrap = cv.parentElement, dpr = Math.min(2, window.devicePixelRatio || 1);
+    const w = wrap.clientWidth, h = wrap.clientHeight;
+    cv.width = w * dpr; cv.height = h * dpr;
+    const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const colors = ['#d4b678', '#c19a55', '#ece3d3', '#6b3f4c', '#a98f6b', '#e8d9b8'];
+    const P = [];
+    for (let i = 0; i < 120; i++) P.push({ x: Math.random() * w, y: -30 - Math.random() * h * 0.6, vx: (Math.random() - .5) * 1.6, vy: 1.6 + Math.random() * 2.6, s: 3.5 + Math.random() * 5.5, r: Math.random() * 6.28, vr: (Math.random() - .5) * .22, c: colors[i % colors.length], sh: i % 3 });
+    const t0 = performance.now();
+    cancelAnimationFrame(this._cf);
+    const tick = t => {
+      const el = t - t0; ctx.clearRect(0, 0, w, h);
+      ctx.globalAlpha = Math.max(0, el > dur - 800 ? 1 - (el - (dur - 800)) / 800 : 1);
+      for (const p of P) {
+        p.x += p.vx + Math.sin(el / 420 + p.r) * .45; p.y += p.vy; p.r += p.vr;
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c;
+        if (p.sh === 0) ctx.fillRect(-p.s / 2, -p.s * .32, p.s, p.s * .64);
+        else if (p.sh === 1) { ctx.beginPath(); ctx.arc(0, 0, p.s * .38, 0, 7); ctx.fill(); }
+        else { ctx.beginPath(); ctx.moveTo(0, -p.s / 2); ctx.lineTo(p.s / 2, 0); ctx.lineTo(0, p.s / 2); ctx.lineTo(-p.s / 2, 0); ctx.fill(); }
+        ctx.restore();
+      }
+      if (el < dur) this._cf = requestAnimationFrame(tick); else ctx.clearRect(0, 0, w, h);
+    };
+    this._cf = requestAnimationFrame(tick);
+  }
+
+  chrome(card, k, t) {
+    const col = card.light ? 'rgba(90,58,68,.88)' : 'rgba(238,229,214,.88)';
+    const tx = t ? t.x : 0, ty = t ? t.y : 0;
+    const tt = t ? this.tTrans(t) : 'none';
+    return {
+      logo: {
+        position: 'absolute', top: '6.5%', left: '8%', color: col,
+        border: '1.5px solid ' + col, padding: (5 * k) + 'px ' + (6 * k) + 'px',
+        display: 'flex', flexDirection: 'column', gap: 1, alignItems: 'center',
+        fontSize: 8.5 * k, letterSpacing: '2px', lineHeight: 1.2,
+        fontFamily: 'Jost,sans-serif', fontWeight: 500, pointerEvents: 'none',
+        transform: 'translate(' + (tx * 7) + 'px,' + (ty * 6) + 'px)', transition: tt,
+      },
+      emb: {
+        position: 'absolute', top: '29.5%', left: '50%',
+        transform: 'translateX(-50%) translate(' + (tx * 15) + 'px,' + (ty * 13) + 'px)',
+        width: 92 * k, height: 92 * k, opacity: card.emblem ? 1 : 0,
+        pointerEvents: 'none', transition: tt,
+        filter: 'brightness(1.18) drop-shadow(0 1px 6px rgba(20,8,12,.55))',
+      },
+      club: {
+        position: 'absolute', left: 0, right: 0, bottom: '7.5%', textAlign: 'center',
+        color: col, fontFamily: 'Jost,sans-serif', fontWeight: 400,
+        fontSize: 12 * k, letterSpacing: (3.6 * k) + 'px', pointerEvents: 'none',
+        transform: 'translate(' + (tx * 7) + 'px,' + (ty * 6) + 'px)', transition: tt,
+      },
+    };
+  }
+  engrave(light, size) {
+    return {
+      position: 'absolute', left: 0, right: 0, top: '62.5%', textAlign: 'center',
+      fontFamily: 'Jost,sans-serif', fontWeight: 300, fontSize: size || 12,
+      letterSpacing: '0.3em', textTransform: 'uppercase', pointerEvents: 'none',
+      color: light ? 'rgba(80,52,60,.85)' : 'rgba(238,229,214,.92)',
+      textShadow: light ? '0 1px 0 rgba(255,255,255,.5)' : '0 1px 1px rgba(0,0,0,.5), 0 -1px 1px rgba(255,255,255,.12)',
+    };
+  }
+
+  renderVals() {
+    const s = this.state, req = this.req();
+    const holder = (s.name || '').trim().slice(0, 22);
+    const pull = s.mode === 'pull' || s.docking;
+    const glow = s.docking ? 1 : (s.mode === 'pull' ? Math.min(s.dy / 200, 1) : 0);
+    const pos = s.sel - (s.mode === 'swipe' ? s.dx : 0) / 170;
+    const chosen = this.cards[s.sel];
+
+    const cardItems = this.cards.map((c, i) => {
+      const off = i - pos, a = Math.abs(off), isC = i === s.sel;
+      let tr, z = 100 - Math.round(a * 10);
+      let op = a > 2.6 ? 0 : 1;
+      if (isC && pull) {
+        const p = Math.min(s.dy / 200, 1);
+        tr = 'translate(-50%,-50%) translate(' + s.dx + 'px,' + s.dy + 'px) rotateZ(' + (s.dx * 0.05) + 'deg) scale(' + (1.05 - p * 0.12) + ')';
+        z = 110;
+        if (s.dockCopy) op = 0;
+      } else {
+        const ry = Math.max(-42, Math.min(42, -off * 30));
+        const sc = (isC && s.pressed) ? 1.05 : 1;
+        tr = 'translate(-50%,-50%) translateX(' + (off * 148) + 'px) translateZ(' + (-a * 130) + 'px) rotateY(' + ry + 'deg) scale(' + sc + ')';
+        if (!isC) op = op * (1 - glow * 0.45);
+      }
+      const trans = (s.docking && isC) ? 'none'
+        : (s.dragging && s.mode) ? 'none'
+        : 'transform .45s cubic-bezier(.22,1,.36,1), opacity .45s ease';
+      return {
+        key: c.id, img: c.img, holder,
+        ch: this.chrome(c, 1),
+        engraveStyle: this.engrave(c.light, 11.5),
+        onDown: e => this.startCardDrag(i, e),
+        style: {
+          position: 'absolute', left: '50%', top: '50%', width: 206, height: 336,
+          transform: tr, transition: trans, zIndex: z, opacity: op,
+          backgroundImage: 'url("' + c.img + '")', backgroundSize: 'cover', backgroundPosition: 'center',
+          borderRadius: 16, cursor: 'grab',
+          boxShadow: '0 26px 50px -18px rgba(40,22,28,.5)',
+          willChange: 'transform', touchAction: 'none',
+        },
+      };
+    });
+
+    const stampItems = [];
+    for (let j = 0; j < req; j++) {
+      const filled = j < s.stamps;
+      stampItems.push({
+        num: j + 1,
+        img: 'assets/stamp-c' + ((j % 5) + 1) + '.png',
+        style: {
+          width: 52, height: 52, borderRadius: '50%', position: 'relative',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: filled ? 'radial-gradient(circle at 35% 28%, #2e161d, #1f0e13)' : 'transparent',
+          border: filled ? '1.5px solid rgba(230,198,138,.9)' : '1.4px dashed rgba(236,227,211,.32)',
+          boxShadow: filled ? '0 4px 14px rgba(0,0,0,.5), 0 0 12px rgba(214,183,124,.25), inset 0 1px 0 rgba(255,255,255,.1)' : 'none',
+          boxSizing: 'border-box',
+        },
+        imgStyle: {
+          position: 'absolute', left: '50%', top: '50%', width: 46, height: 46,
+          margin: '-23px 0 0 -23px', borderRadius: '50%',
+          backgroundImage: 'url("assets/stamp-c' + ((j % 5) + 1) + '.png")',
+          backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center',
+          filter: 'brightness(1.35) saturate(1.15) drop-shadow(0 1px 3px rgba(15,6,9,.7))',
+          display: filled ? 'block' : 'none',
+          animation: s.justStamped === j ? 'hm-pop .55s cubic-bezier(.2,1.3,.4,1) both' : 'none',
+        },
+        numStyle: {
+          display: filled ? 'none' : 'block',
+          fontSize: 13, fontWeight: 300, color: 'rgba(236,227,211,.4)',
+        },
+      });
+    }
+
+    return {
+      isIntro: s.phase === 'intro', isSelect: s.phase === 'select',
+      isCelebrate: s.phase === 'celebrate', isHome: s.phase === 'home',
+      reward: s.reward, confRef: this.confRef,
+      name: s.name, email: s.email, dob: s.dob,
+      onName: e => this.setState({ name: e.target.value }),
+      onEmail: e => this.setState({ email: e.target.value }),
+      onDob: e => this.setState({ dob: e.target.value }),
+      submit: () => { if (this.canSubmit()) this.setState({ phase: 'select' }); },
+      submitStyle: {
+        width: '100%', padding: 16, borderRadius: 999, border: 'none',
+        background: '#4a2b33', color: '#ece3d3', fontFamily: 'Jost,sans-serif',
+        fontSize: 13, letterSpacing: '2.2px', textTransform: 'uppercase',
+        cursor: this.canSubmit() ? 'pointer' : 'default',
+        opacity: this.canSubmit() ? 1 : 0.4,
+        boxShadow: '0 14px 30px -8px rgba(58,33,40,.5)',
+        transition: 'opacity .3s ease',
+      },
+      cardItems, holder,
+      selName: chosen.name, selCount: (s.sel + 1) + ' de ' + this.cards.length,
+      groundShadowStyle: {
+        position: 'absolute', left: '50%', top: 'calc(50% + 178px)', transform: 'translateX(-50%)',
+        width: 190, height: 26, borderRadius: '50%',
+        background: 'radial-gradient(closest-side, rgba(40,22,28,.32), rgba(40,22,28,0))',
+        opacity: pull ? Math.max(0, 1 - s.dy / 160) : 1, transition: s.dragging ? 'none' : 'opacity .4s',
+      },
+      chevWrapStyle: {
+        height: 38, display: 'flex', flexDirection: 'column', alignItems: 'center',
+        gap: 3, paddingTop: 6, opacity: 1 - glow, transition: 'opacity .2s',
+      },
+      ghostStyle: {
+        position: 'absolute', left: '50%', top: '50%', width: 206, height: 336,
+        transform: 'translate(-50%,-50%)', borderRadius: 16,
+        border: '1.5px solid rgba(90,60,70,.5)', background: 'rgba(90,60,70,.05)',
+        boxShadow: 'inset 0 0 26px rgba(90,60,70,.14)',
+        opacity: pull ? Math.min(s.dy / 70, 1) : 0,
+        transition: 'opacity .25s ease', zIndex: 5, pointerEvents: 'none',
+      },
+      haloStyle: (() => {
+        const hp = pull ? Math.min(s.dy / 200, 1) : 0;
+        const hx = pull ? s.dx : 0, hy = pull ? s.dy : 0;
+        return {
+          position: 'absolute', left: '50%', top: '50%', width: 286, height: 406,
+          transform: 'translate(-50%,-50%) translate(' + hx + 'px,' + hy + 'px) scale(' + ((s.pressed || pull) ? 1.04 : 0.88) + ')',
+          background: 'radial-gradient(closest-side, rgba(214,183,124,.55), rgba(214,183,124,.16) 55%, rgba(214,183,124,0) 74%)',
+          filter: 'blur(13px)',
+          opacity: s.docking ? 0 : (s.pressed || pull) ? Math.max(0.35, 0.95 - hp * 0.5) : 0,
+          transition: (s.dragging && s.mode) ? 'opacity .3s ease' : 'opacity .35s ease, transform .5s cubic-bezier(.22,1,.36,1)',
+          zIndex: 20, pointerEvents: 'none',
+        };
+      })(),
+      carRef: this.carRef, selRef: this.selRef,
+      dockCopyOn: !!s.dockCopy,
+      dockClipStyle: { position: 'absolute', left: 0, right: 0, top: 0, height: (this._rootH || 874) - 114, overflow: 'hidden', zIndex: 130, pointerEvents: 'none' },
+      dockCardStyle: (() => {
+        const dc = s.dockCopy; if (!dc) return { display: 'none' };
+        const rootH = this._rootH || 874, rootW = this._rootW || 402;
+        const dist = (rootH - 114) - dc.y + 12;
+        const cx = rootW / 2 - 103 - dc.x;
+        const tr = s.dockAnim === 'in' ? 'translate(' + cx + 'px,' + dist + 'px) scale(.96)'
+          : s.dockAnim === 'back' ? 'translate(0px,0px) scale(1)'
+          : 'translate(' + s.dx + 'px,' + s.dy + 'px) scale(' + (1.05 - Math.min(s.dy / 200, 1) * 0.12) + ')';
+        return {
+          position: 'absolute', left: dc.x, top: dc.y, width: 206, height: 336, borderRadius: 16,
+          boxShadow: '0 26px 50px -18px rgba(40,22,28,.5)',
+          backgroundImage: 'url("' + chosen.img + '")', backgroundSize: 'cover', backgroundPosition: 'center',
+          overflow: 'hidden',
+          transform: tr,
+          transition: s.dockAnim === 'in' ? 'transform .95s cubic-bezier(.6,.08,.52,1)' : s.dockAnim === 'back' ? 'transform .5s cubic-bezier(.22,1,.36,1)' : 'none',
+        };
+      })(),
+      dockCh: this.chrome(chosen, 1),
+      dockEngrave: this.engrave(chosen.light, 11.5),
+      celCh: this.chrome(chosen, 1.13, s.tc),
+      homeCh: this.chrome(chosen, 1.21, s.th),
+      celMove: e => this.tiltMove('tc', e), celLeave: () => this.tiltEnd('tc'),
+      homeMove: e => this.tiltMove('th', e), homeLeave: () => this.tiltEnd('th'),
+      celTiltStyle: {
+        position: 'relative', width: 232, height: 379, borderRadius: 17,
+        boxShadow: '0 34px 60px -20px rgba(40,22,28,.55)', touchAction: 'none',
+        overflow: 'hidden',
+        transform: 'perspective(950px) rotateX(' + (-s.tc.y * 12) + 'deg) rotateY(' + (s.tc.x * 14) + 'deg)' + (s.tc.on ? ' scale(1.025)' : ''),
+        transition: this.tTrans(s.tc),
+      },
+      celImgStyle: {
+        position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', borderRadius: 17,
+        transform: 'translate(' + (-s.tc.x * 9) + 'px,' + (-s.tc.y * 8) + 'px) scale(1.07)',
+        transition: this.tTrans(s.tc),
+      },
+      celShine: {
+        position: 'absolute', inset: 0, borderRadius: 17, pointerEvents: 'none',
+        background: 'radial-gradient(circle at ' + (50 + s.tc.x * 70) + '% ' + (42 + s.tc.y * 60) + '%, rgba(255,255,255,.26), rgba(255,255,255,0) 56%)',
+        opacity: s.tc.on ? 1 : 0, transition: 'opacity .35s ease',
+      },
+      celEngrave: Object.assign({}, this.engrave(chosen.light, 13), {
+        transform: 'translate(' + (s.tc.x * 9) + 'px,' + (s.tc.y * 8) + 'px)', transition: this.tTrans(s.tc),
+      }),
+      homeTiltStyle: (() => {
+        const vt = s.vDragging || s.vPhase;
+        return {
+          width: '100%', height: '100%', transformStyle: vt ? 'flat' : 'preserve-3d', touchAction: 'none',
+          transform: vt ? 'translateY(' + s.vdy + 'px) scale(' + (1 - Math.min(s.vdy / 900, 0.07)) + ')' : 'rotateX(' + (-s.th.y * 10) + 'deg) rotateY(' + (s.th.x * 12) + 'deg)',
+          opacity: s.vCopy ? 0 : 1,
+          transition: (s.vDragging || s.vCopy) ? 'none' : this.tTrans(s.th),
+        };
+      })(),
+      homeImgStyle: {
+        position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover',
+        transform: 'translate(' + (-s.th.x * 9) + 'px,' + (-s.th.y * 8) + 'px) scale(1.07)',
+        transition: this.tTrans(s.th),
+      },
+      homeShine: {
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        background: 'radial-gradient(circle at ' + (50 + s.th.x * 70) + '% ' + (42 + s.th.y * 60) + '%, rgba(255,255,255,.24), rgba(255,255,255,0) 56%)',
+        opacity: s.th.on ? 1 : 0, transition: 'opacity .35s ease',
+      },
+      homeEngrave: Object.assign({}, this.engrave(chosen.light, 13), {
+        transform: 'translate(' + (s.th.x * 9) + 'px,' + (s.th.y * 8) + 'px)', transition: this.tTrans(s.th),
+      }),
+      slotStyle: {
+        width: 236, height: 13, borderRadius: 7, background: '#150a0d',
+        border: '1px solid rgba(212,182,120,' + (0.22 + 0.6 * glow) + ')',
+        boxShadow: 'inset 0 2px 6px rgba(0,0,0,.85), 0 0 ' + (14 + 34 * glow) + 'px rgba(212,182,120,' + (0.12 + 0.7 * glow) + ')',
+        transition: s.dragging ? 'none' : 'all .4s ease',
+      },
+      dockLabel: glow >= 1 ? 'Suelta para activar' : 'Arrastra tu tarjeta al lector',
+      firstName: (s.name || '').trim().split(' ')[0] || 'bienvenido',
+      chosenImg: chosen.img, chosenReady: true,
+      chosenEngraveStyle: this.engrave(chosen.light, 13),
+      toHome: () => { this.persist(); this.setState({ phase: 'home', flipped: false }); },
+      memberLine: holder ? 'Miembro · ' + holder : 'Miembro',
+      flip: () => { if (this._vMoved || s.qr) return; this.setState({ flipped: !s.flipped }); },
+      homeRef: this.homeRef, cardWrapRef: this.cardWrapRef, qrRef: this.qrRef,
+      vCopyOn: !!s.vCopy,
+      vClipStyle: { position: 'absolute', left: 0, right: 0, top: 0, height: (this._vRootH || 874) - 84, overflow: 'hidden', zIndex: 150, pointerEvents: 'none' },
+      vCardStyle: (() => {
+        const vc = s.vCopy; if (!vc) return { display: 'none' };
+        const tr = s.vAnim === 'in' ? 'translateY(' + vc.dIn + 'px) scale(.97)'
+          : (s.vAnim === 'out' || s.vAnim === 'back') ? 'translateY(0px) scale(1)'
+          : 'translateY(' + s.vdy + 'px) scale(' + (1 - Math.min(s.vdy / 900, 0.07)) + ')';
+        return {
+          position: 'absolute', left: vc.x, top: vc.y, width: 250, height: 408, borderRadius: 18,
+          backgroundImage: 'url("' + chosen.img + '")', backgroundSize: 'cover', backgroundPosition: 'center',
+          overflow: 'hidden', boxShadow: '0 30px 56px -18px rgba(40,22,28,.5)',
+          transform: tr,
+          transition: s.vDragging ? 'none' : s.vAnim === 'in' ? 'transform .58s cubic-bezier(.5,.05,.6,.9)' : s.vAnim === 'out' ? 'transform .85s cubic-bezier(.2,1.5,.35,1)' : s.vAnim === 'back' ? 'transform .5s cubic-bezier(.22,1,.36,1)' : 'none',
+        };
+      })(),
+      vCh: this.chrome(chosen, 1.21),
+      vEngrave: this.engrave(chosen.light, 13),
+      visitDown: e => this.startVisitDrag(e),
+      qr: s.qr,
+      qrClose: e => { e.stopPropagation(); cancelAnimationFrame(this._qra); this.setState({ qr: false }); },
+      demoScanOn: s.qr && (this.props.showDemo ?? true),
+      simulateScan: () => this.simulateScan(),
+      qrLine: 'visita ' + Math.min(s.stamps + 1, req) + ' de ' + req + (holder ? ' · ' + holder : ''),
+      vDockLabel: (() => {
+        const vglow = s.vDragging ? Math.min(s.vdy / 170, 1) : 0;
+        return s.vPhase === 'in' ? 'Leyendo tarjeta…' : s.vPhase === 'out' ? 'Grabando código…' : s.qr ? 'Esperando escáner' : (s.vDragging && vglow >= 1) ? 'Suelta para escanear' : 'Arrastra tu tarjeta para registrar tu visita';
+      })(),
+      vSlotStyle: (() => {
+        const vglow = s.vDragging ? Math.min(s.vdy / 170, 1) : s.vPhase ? 1 : 0;
+        return {
+          width: 274, height: 13, borderRadius: 8, background: '#150a0d',
+          border: '1px solid rgba(212,182,120,' + (0.22 + 0.6 * vglow) + ')',
+          boxShadow: 'inset 0 2px 6px rgba(0,0,0,.85), 0 0 ' + (12 + 30 * vglow) + 'px rgba(212,182,124,' + (0.12 + 0.7 * vglow) + ')',
+          transition: s.vDragging ? 'none' : 'all .4s ease',
+        };
+      })(),
+      flipInnerStyle: {
+        position: 'relative', width: '100%', height: '100%',
+        transformStyle: 'preserve-3d',
+        transform: 'rotateY(' + (s.flipped ? 180 : 0) + 'deg)',
+        transition: 'transform .9s cubic-bezier(.35,.1,.2,1)',
+      },
+      goalLine: 'Completa ' + req + ' visitas y elige un postre de regalo',
+      stampItems,
+      progressBarStyle: {
+        height: '100%', width: (s.stamps / req * 100) + '%',
+        background: 'linear-gradient(90deg,#c19a55,#e3c98f)', borderRadius: 2,
+        transition: 'width .7s cubic-bezier(.22,1,.36,1)',
+      },
+      progressLine: s.stamps >= req ? 'Colección completa — postre de regalo' : s.stamps + ' de ' + req + ' visitas',
+      holderCaps: (holder || 'Miembro').toUpperCase(),
+      flipHint: s.qr ? 'Código grabado en tu tarjeta · acércala al escáner' : s.flipped ? 'Toca para ver el frente' : 'Toca la tarjeta para ver tus estampillas',
+      demoOn: this.props.showDemo ?? true,
+      addStamp: () => this.addStamp(),
+      stampBtnStyle: {
+        padding: '13px 30px', borderRadius: 999, border: '1px solid #5a3540',
+        background: 'transparent', color: '#4a2b33', fontFamily: 'Jost,sans-serif',
+        fontSize: 12, letterSpacing: '2.2px', textTransform: 'uppercase',
+        cursor: s.stamps >= req ? 'default' : 'pointer',
+        opacity: s.stamps >= req && !s.reward ? 0.35 : 1, transition: 'opacity .3s',
+      },
+      reqStamps: req,
+      redeem: () => { this.setState({ reward: false, stamps: 0, justStamped: -1, flipped: false }); this.persist({ stamps: 0 }); },
+      reset: () => {
+        try { localStorage.setItem(this.KEY, '{}'); } catch (e) {}
+        this.setState({ phase: 'intro', name: '', email: '', dob: '', sel: 1, stamps: 0, justStamped: -1, reward: false, flipped: false, dx: 0, dy: 0, mode: null, docking: false, vdy: 0, vDragging: false, vPhase: null, vCopy: null, vAnim: null, qr: false });
+      },
+    };
+  }
+
+  canSubmit() {
+    const s = this.state;
+    return s.name.trim().length >= 2 && /.+@.+\..+/.test(s.email) && !!s.dob;
+  }
+  addStamp() {
+    const req = this.req(), s = this.state;
+    if (s.reward || s.stamps >= req) return;
+    const n = s.stamps + 1;
+    const doStamp = () => {
+      this.setState({ stamps: n, justStamped: n - 1 });
+      this.persist({ stamps: n });
+      if (n === req) setTimeout(() => { this.setState({ reward: true }); this.startConfetti(4200); }, 1100);
+    };
+    if (!s.flipped) { this.setState({ flipped: true }); setTimeout(doStamp, 650); } else doStamp();
+  }
+}
+</script>
+</body>
+</html>
