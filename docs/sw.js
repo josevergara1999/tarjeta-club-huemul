@@ -8,12 +8,15 @@
       espera no sirve de nada.
    2. En Android, el navegador solo ofrece instalar una página si tiene esto.
 
-   Estrategia: la caja fuerte primero. Se guarda todo al instalar y se sirve
-   desde ahí, mientras por detrás se busca una versión nueva para la próxima vez.
-   Al cambiar VERSION se borra lo viejo y se vuelve a guardar.
+   Estrategia: al ABRIR la tarjeta manda la red, con lo guardado esperando por si
+   tarda más de 3,5 segundos. El resto de archivos se sirve de lo guardado y se
+   refresca por detrás. Cada compilación estrena versión y borra la anterior.
    ========================================================================== */
 
-var VERSION = 'huemul-v1';
+// El sello lo escribe build.mjs con la huella del index.html: cada cambio real
+// estrena cache y borra la anterior. Cuando era un numero a mano, se olvidaba —
+// y una version vieja servida desde la cache parece que el cambio no se subio.
+var VERSION = 'huemul-ff9bef8b16';
 
 var GUARDAR = [
   './',
@@ -52,11 +55,38 @@ self.addEventListener('fetch', function (e) {
   var url = new URL(req.url);
   if (url.origin !== location.origin) return;   // las fuentes de Google se las arregla el navegador
 
-  // Una navegación siempre devuelve la tarjeta, esté como esté la red.
+  // Al abrir la tarjeta se pregunta a la red PRIMERO, pero sin dejar a nadie
+  // esperando: si en 3,5 segundos no contesta, entra lo guardado. Asi el que
+  // tiene señal ve siempre lo ultimo, y el que no tiene abre igual.
+  //
+  // Al reves —lo guardado primero— la persona se queda con una version vieja
+  // hasta la proxima vez que abra, y en pleno meson eso no se entiende.
   if (req.mode === 'navigate') {
     e.respondWith(
-      caches.match('./index.html').then(function (hit) {
-        return hit || fetch(req);
+      new Promise(function (listo) {
+        var resuelto = false;
+        function responder(r) { if (!resuelto) { resuelto = true; listo(r); } }
+
+        var reloj = setTimeout(function () {
+          caches.match('./index.html').then(function (hit) { if (hit) responder(hit); });
+        }, 3500);
+
+        // 'no-cache' no significa no usar cache: significa preguntarle al servidor
+        // si cambio. Si no cambio contesta 304 y no se baja nada. Sin esto, los 10
+        // minutos de cache de GitHub tapan el cambio recien subido.
+        fetch(new Request(req.url, { cache: 'no-cache' })).then(function (res) {
+          clearTimeout(reloj);
+          if (res && res.ok) {
+            var copia = res.clone();
+            caches.open(VERSION).then(function (c) { c.put('./index.html', copia); });
+          }
+          responder(res);
+        }).catch(function () {
+          clearTimeout(reloj);
+          caches.match('./index.html').then(function (hit) {
+            responder(hit || Response.error());
+          });
+        });
       })
     );
     return;

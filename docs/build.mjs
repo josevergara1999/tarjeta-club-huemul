@@ -2,6 +2,7 @@
 // No toca el diseño: solo mete dentro del archivo lo que el navegador
 // pediría por red (runtime, marco de iPhone, imágenes).
 import { readFileSync, writeFileSync } from 'node:fs'
+import { createHash } from 'node:crypto'
 import { basename } from 'node:path'
 
 const P   = process.env.P
@@ -135,4 +136,9 @@ const out = SC + '/index.html'
 // El guion va al FINAL, despues del diseno: observa sus pantallas para saber
 // cuando termino la inscripcion.
 writeFileSync(out, cabeza + '\n' + doc + '\n' + '<script>' + alta('alta.js') + '</script>' + '\n')
+// El trabajador de servicio sale de aqui con la huella del archivo dentro: asi
+// cada cambio estrena cache sola y nadie se queda con la version vieja.
+const sello = createHash('sha256').update(readFileSync(out)).digest('hex').slice(0, 10)
+writeFileSync(SC + '/sw.js', alta('sw.js').replace('__SELLO__', sello))
+console.log('sw.js  version huemul-' + sello)
 console.log('\n' + basename(out) + '  ' + Math.round(readFileSync(out).length / 1024) + ' KB')

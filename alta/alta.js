@@ -359,7 +359,10 @@
   // (por ejemplo al abrir el archivo suelto), no pasa nada.
   if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('sw.js').catch(function () {});
+      // updateViaCache 'none': GitHub sirve con 10 minutos de cache propia, y sin
+      // esto el navegador podia quedarse con el trabajador viejo — que es justo el
+      // que sigue entregando la version vieja de la pagina.
+      navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(function () {});
     });
   }
 })();
