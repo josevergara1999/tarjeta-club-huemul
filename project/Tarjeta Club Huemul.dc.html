@@ -185,25 +185,25 @@ input[type="date"]{color-scheme:light}
     <span onClick="{{ reset }}" style="font-size:10.5px;color:rgba(90,60,70,.5);text-decoration:underline;cursor:pointer">Reiniciar demo</span>
   </div>
   <sc-if value="{{ qr }}" hint-placeholder-val="{{ false }}">
-  <div style="position:absolute;left:0;right:0;top:104px;height:452px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;z-index:60;animation:hm-fadeUp .55s cubic-bezier(.22,1,.36,1) both">
+  <div style="position:absolute;left:0;right:0;top:118px;bottom:290px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:60;animation:hm-fadeUp .55s cubic-bezier(.22,1,.36,1) both">
     <div style="font-size:10.5px;letter-spacing:3px;text-transform:uppercase;color:#a3814f">Muestra el código al equipo</div>
-    <div style="background:rgba(246,241,230,.97);border:1px solid rgba(212,182,120,.85);border-radius:18px;padding:16px 16px 12px;box-shadow:0 22px 48px -18px rgba(58,33,40,.4), inset 0 1px 0 rgba(255,255,255,.7)">
-      <canvas ref="{{ qrRef }}" width="440" height="440" style="width:212px;height:212px;display:block;border-radius:8px"></canvas>
-      <div style="font-family:Jost,sans-serif;font-size:9px;letter-spacing:2.2px;text-transform:uppercase;color:#6d5560;text-align:center;margin-top:9px">{{ qrLine }}</div>
+    <div style="background:rgba(246,241,230,.97);border:1px solid rgba(212,182,120,.85);border-radius:18px;padding:14px 14px 10px;box-shadow:0 22px 48px -18px rgba(58,33,40,.4), inset 0 1px 0 rgba(255,255,255,.7)">
+      <canvas ref="{{ qrRef }}" width="440" height="440" style="width:200px;height:200px;display:block;border-radius:8px"></canvas>
+      <div style="font-family:Jost,sans-serif;font-size:9px;letter-spacing:2.2px;text-transform:uppercase;color:#6d5560;text-align:center;margin-top:8px">{{ qrLine }}</div>
     </div>
+    <button onClick="{{ qrClose }}" style="margin-top:4px;padding:14px 38px;border-radius:999px;border:none;background:#4a2b33;color:#ece3d3;font-family:Jost,sans-serif;font-size:12px;letter-spacing:2.2px;text-transform:uppercase;cursor:pointer;box-shadow:0 14px 30px -8px rgba(58,33,40,.5)">Retirar tarjeta</button>
     <sc-if value="{{ demoScanOn }}" hint-placeholder-val="{{ false }}">
-      <button onClick="{{ simulateScan }}" style="margin-top:6px;padding:12px 30px;border-radius:999px;border:1px solid rgba(163,129,79,.8);background:transparent;color:#4a2b33;font-family:Jost,sans-serif;font-size:11.5px;letter-spacing:2.2px;text-transform:uppercase;cursor:pointer">Simular escáner</button>
+      <span onClick="{{ simulateScan }}" style="font-size:10.5px;color:rgba(90,60,70,.55);text-decoration:underline;cursor:pointer;letter-spacing:.5px">Simular escáner (demo)</span>
     </sc-if>
-    <span onClick="{{ qrClose }}" style="font-size:11px;color:rgba(90,60,70,.6);text-decoration:underline;cursor:pointer;letter-spacing:.5px">Retirar tarjeta</span>
   </div>
   </sc-if>
   <div style="position:absolute;left:0;right:0;bottom:0;height:112px;background:linear-gradient(180deg,#3a2128,#2a161c);border-radius:30px 30px 0 0;box-shadow:0 -16px 40px rgba(43,23,29,.35);display:flex;flex-direction:column;align-items:center;padding-top:22px;box-sizing:border-box;z-index:140">
     <div style="{{ vSlotStyle }}"></div>
-    <div style="margin-top:16px;font-size:10.5px;letter-spacing:2.4px;text-transform:uppercase;color:rgba(236,227,211,.68);text-align:center;padding:0 20px">{{ vDockLabel }}</div>
+    <div style="margin-top:16px;font-size:10.5px;letter-spacing:2.4px;text-transform:uppercase;color:rgba(236,227,211,.68);text-align:center;padding:0 20px;width:100%;box-sizing:border-box;line-height:1.6">{{ vDockLabel }}</div>
   </div>
   <sc-if value="{{ vCopyOn }}" hint-placeholder-val="{{ false }}">
   <div style="{{ vClipStyle }}">
-    <div style="{{ vCardStyle }}">
+    <div style="{{ vCardStyle }}" onPointerDown="{{ seatedDown }}">
       <div style="{{ vCh.logo }}"><span>HUE</span><span>MUL</span></div>
       <img src="assets/stamp-c6.png" alt="" style="{{ vCh.emb }}">
       <div style="{{ vCh.club }}">CLUB HUEMUL<div style="font-family:'Cormorant Garamond',serif;font-size:.98em;letter-spacing:.22em;text-transform:lowercase;margin-top:3px;opacity:.88">Fidelización</div></div>
@@ -249,7 +249,7 @@ class Component extends DCLogic {
     { id: 'topografia', name: 'Topografía', img: 'assets/new-0859.png', light: false, emblem: true },
     { id: 'acuarela', name: 'Acuarela', img: 'assets/new-0823.png', light: false, emblem: false },
   ];
-  state = { phase: 'intro', name: '', email: '', dob: '', sel: 1, dx: 0, dy: 0, dragging: false, mode: null, docking: false, pressed: false, dockCopy: null, dockAnim: false, flipped: false, stamps: 0, justStamped: -1, reward: false, tc: { x: 0, y: 0, on: false }, th: { x: 0, y: 0, on: false }, vdy: 0, vDragging: false, vPhase: null, vCopy: null, vAnim: null, qr: false };
+  state = { phase: 'intro', name: '', email: '', dob: '', sel: 1, dx: 0, dy: 0, dragging: false, mode: null, docking: false, pressed: false, dockCopy: null, dockAnim: false, flipped: false, stamps: 0, justStamped: -1, reward: false, tc: { x: 0, y: 0, on: false }, th: { x: 0, y: 0, on: false }, vdy: 0, vDragging: false, vPhase: null, vCopy: null, vAnim: null, vPull: 0, vPulling: false, qr: false };
 
   componentDidUpdate(pp, ps) {
     const was = ps && ps.qr;
@@ -295,7 +295,29 @@ class Component extends DCLogic {
   insertVisit() {
     if (!this.state.vCopy) return;
     this.setState({ vPhase: 'in', vDragging: false, vAnim: 'in' });
-    setTimeout(() => this.setState({ vPhase: 'seated', vAnim: 'seated', qr: true }), this._prm ? 40 : 640);
+    setTimeout(() => this.setState({ vPhase: 'seated', vAnim: 'seated', qr: true, vPull: 0, vPulling: false }), this._prm ? 40 : 640);
+  }
+  seatedDown(e) {
+    if (this.state.vPhase !== 'seated') return;
+    e.preventDefault(); e.stopPropagation();
+    this._sdrag = { y0: e.clientY, moved: false };
+    this._smv = ev => this.seatedMove(ev); this._sup = () => this.seatedEnd();
+    window.addEventListener('pointermove', this._smv); window.addEventListener('pointerup', this._sup); window.addEventListener('pointercancel', this._sup);
+  }
+  seatedMove(ev) {
+    const d = this._sdrag; if (!d) return;
+    const up = d.y0 - ev.clientY;
+    if (!d.moved && Math.abs(up) < 6) return;
+    d.moved = true;
+    this.setState({ vPull: Math.max(0, up), vPulling: true });
+  }
+  seatedEnd() {
+    if (this._smv) { window.removeEventListener('pointermove', this._smv); window.removeEventListener('pointerup', this._sup); window.removeEventListener('pointercancel', this._sup); this._smv = null; }
+    const d = this._sdrag; this._sdrag = null; if (!d) return;
+    const pull = this.state.vPull || 0;
+    if (!d.moved || pull > 90) { this.setState({ vPulling: false }); this.ejectCard(); return; }
+    this.setState({ vPulling: false, vAnim: 'reseat' });
+    setTimeout(() => { if (this.state.vAnim === 'reseat' && !this._sdrag) this.setState({ vAnim: 'seated', vPull: 0 }); }, this._prm ? 40 : 460);
   }
   reseatCard() {
     if (!this.state.vCopy || this.state.vPhase !== 'seated') return;
@@ -312,7 +334,7 @@ class Component extends DCLogic {
     cancelAnimationFrame(this._qra);
     if (!this.state.vCopy) { this.setState({ qr: false }); if (after) after(); return; }
     this.setState({ qr: false, vPhase: 'eject', vAnim: 'eject' });
-    setTimeout(() => { this.setState({ vPhase: null, vAnim: null, vCopy: null, vdy: 0 }); if (after) after(); }, this._prm ? 40 : 680);
+    setTimeout(() => { this.setState({ vPhase: null, vAnim: null, vCopy: null, vdy: 0, vPull: 0, vPulling: false }); if (after) after(); }, this._prm ? 40 : 680);
   }
   simulateScan() {
     if (this._scanBusy) return; this._scanBusy = true;
@@ -384,7 +406,7 @@ class Component extends DCLogic {
       if (s && s.done) this.setState({ phase: 'home', sel: s.sel || 0, name: s.name || '', email: s.email || '', dob: s.dob || '', stamps: Math.min(s.stamps || 0, this.req()) });
     } catch (e) {}
   }
-  componentWillUnmount() { this.rmListeners(); if (this._vrs) window.removeEventListener('resize', this._vrs); cancelAnimationFrame(this._cf); cancelAnimationFrame(this._qra); }
+  componentWillUnmount() { this.rmListeners(); if (this._vrs) window.removeEventListener('resize', this._vrs); if (this._smv) { window.removeEventListener('pointermove', this._smv); window.removeEventListener('pointerup', this._sup); window.removeEventListener('pointercancel', this._sup); } cancelAnimationFrame(this._cf); cancelAnimationFrame(this._qra); }
 
   persist(extra) {
     const { sel, name, email, dob, stamps } = this.state;
@@ -731,7 +753,8 @@ class Component extends DCLogic {
       vClipStyle: { position: 'absolute', left: 0, right: 0, top: 0, height: (this._vRootH || 874) - 84, overflow: 'hidden', zIndex: 150, pointerEvents: 'none' },
       vCardStyle: (() => {
         const vc = s.vCopy; if (!vc) return { display: 'none' };
-        const tr = (s.vAnim === 'in' || s.vAnim === 'seated') ? 'translateY(' + vc.dIn + 'px) scale(.97)'
+        const upl = s.vPulling ? (s.vPull || 0) : 0;
+        const tr = (s.vAnim === 'in' || s.vAnim === 'seated' || s.vAnim === 'reseat') ? 'translateY(' + (vc.dIn - upl) + 'px) scale(.97)'
           : (s.vAnim === 'eject' || s.vAnim === 'back') ? 'translateY(0px) scale(1)'
           : 'translateY(' + s.vdy + 'px) scale(' + (1 - Math.min(s.vdy / 900, 0.07)) + ')';
         return {
@@ -739,12 +762,15 @@ class Component extends DCLogic {
           backgroundImage: 'url("' + chosen.img + '")', backgroundSize: 'cover', backgroundPosition: 'center',
           overflow: 'hidden', boxShadow: '0 30px 56px -18px rgba(40,22,28,.5)',
           transform: tr,
-          transition: s.vDragging ? 'none' : s.vAnim === 'in' ? 'transform .62s cubic-bezier(.3,.72,.25,1.06)' : s.vAnim === 'eject' ? 'transform .65s cubic-bezier(.22,1,.36,1)' : s.vAnim === 'back' ? 'transform .5s cubic-bezier(.22,1,.36,1)' : 'none',
+          transition: (s.vDragging || s.vPulling) ? 'none' : s.vAnim === 'in' ? 'transform .62s cubic-bezier(.3,.72,.25,1.06)' : s.vAnim === 'reseat' ? 'transform .45s cubic-bezier(.22,1,.36,1)' : s.vAnim === 'eject' ? 'transform .65s cubic-bezier(.22,1,.36,1)' : s.vAnim === 'back' ? 'transform .5s cubic-bezier(.22,1,.36,1)' : 'none',
+          pointerEvents: (s.vAnim === 'seated' || s.vAnim === 'reseat') ? 'auto' : 'none',
+          cursor: 'grab', touchAction: 'none',
         };
       })(),
       vCh: this.chrome(chosen, 1.21),
       vEngrave: this.engrave(chosen.light, 13),
       visitDown: e => this.startVisitDrag(e),
+      seatedDown: e => this.seatedDown(e),
       qr: s.qr,
       qrClose: e => { e.stopPropagation(); this.ejectCard(); },
       demoScanOn: s.qr && (this.props.showDemo ?? true),
@@ -752,7 +778,7 @@ class Component extends DCLogic {
       qrLine: 'visita ' + Math.min(s.stamps + 1, req) + ' de ' + req + (holder ? ' · ' + holder : ''),
       vDockLabel: (() => {
         const vglow = s.vDragging ? Math.min(s.vdy / 170, 1) : 0;
-        return s.vPhase === 'in' ? 'Leyendo tarjeta…' : s.vPhase === 'seated' ? 'Tarjeta en el lector · esperando escáner' : s.vPhase === 'eject' ? 'Retirando tarjeta…' : (s.vDragging && vglow >= 1) ? 'Suelta para escanear' : 'Arrastra tu tarjeta para registrar tu visita';
+        return s.vPhase === 'in' ? 'Leyendo tarjeta…' : s.vPhase === 'seated' ? (s.vPulling && (s.vPull || 0) > 90 ? 'Suelta para retirar tu tarjeta' : s.vPulling ? 'Tira hacia arriba para retirar' : 'Esperando escáner · toca tu tarjeta para retirarla') : s.vPhase === 'eject' ? 'Retirando tarjeta…' : (s.vDragging && vglow >= 1) ? 'Suelta para escanear' : 'Arrastra tu tarjeta para registrar tu visita';
       })(),
       vSlotStyle: (() => {
         const vglow = s.vDragging ? Math.min(s.vdy / 170, 1) : s.vPhase ? 1 : 0;
@@ -792,7 +818,7 @@ class Component extends DCLogic {
       redeem: () => { this.setState({ reward: false, stamps: 0, justStamped: -1, flipped: false }); this.persist({ stamps: 0 }); },
       reset: () => {
         try { localStorage.setItem(this.KEY, '{}'); } catch (e) {}
-        this.setState({ phase: 'intro', name: '', email: '', dob: '', sel: 1, stamps: 0, justStamped: -1, reward: false, flipped: false, dx: 0, dy: 0, mode: null, docking: false, vdy: 0, vDragging: false, vPhase: null, vCopy: null, vAnim: null, qr: false });
+        this.setState({ phase: 'intro', name: '', email: '', dob: '', sel: 1, stamps: 0, justStamped: -1, reward: false, flipped: false, dx: 0, dy: 0, mode: null, docking: false, vdy: 0, vDragging: false, vPhase: null, vCopy: null, vAnim: null, vPull: 0, vPulling: false, qr: false });
       },
     };
   }

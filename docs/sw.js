@@ -16,7 +16,7 @@
 // El sello lo escribe build.mjs con la huella del index.html: cada cambio real
 // estrena cache y borra la anterior. Cuando era un numero a mano, se olvidaba —
 // y una version vieja servida desde la cache parece que el cambio no se subio.
-var VERSION = 'huemul-c3cc7ba306';
+var VERSION = 'huemul-e1236662ac';
 
 var GUARDAR = [
   './',
