@@ -63,6 +63,9 @@ const supp = readFileSync(P + '/support.js', 'utf8')
 const CSS_MOVIL = `
 @media (max-width: 820px) {
   html, body { overflow: hidden; }
+  /* Las franjas fuera del area segura toman el fondo del lienzo, que sale del
+     <html>. Se le pone el mismo degradado del diseno para que no se note el corte. */
+  html { background: linear-gradient(180deg, #d9d1c5 0%, #cbc2b6 55%, #bcb1a2 100%); }
   [data-om-starter="ios-frame"] {
     position: fixed !important; inset: 0 !important;
     width: auto !important; height: auto !important;
@@ -83,6 +86,15 @@ const cabeza = [
   // asi que la regla de movil de abajo no llega a aplicarse nunca.
   '<meta name="viewport" content="width=device-width, initial-scale=1">',
   '<title>Tarjeta Club Huemul</title>',
+  // Instalada en el telefono, iOS pinta las franjas del notch y del indicador de
+  // home con el color de fondo del documento. Sin declararlo salian BLANCAS,
+  // cortando el crema del diseno por arriba y por abajo.
+  '<meta name="theme-color" content="#d9d1c5">',
+  '<meta name="apple-mobile-web-app-capable" content="yes">',
+  '<meta name="apple-mobile-web-app-status-bar-style" content="default">',
+  '<meta name="apple-mobile-web-app-title" content="Club Huemul">',
+  '<link rel="manifest" href="manifest.webmanifest">',
+  '<link rel="apple-touch-icon" href="apple-touch-icon.png">',
   '<script>' + lib('react.js') + '</script>',
   '<script>' + lib('react-dom.js') + '</script>',
   '<script>' + lib('babel.js') + '</script>',
