@@ -206,6 +206,18 @@
   margin-bottom: 3px;
 }
 
+/* El paso que la gente se salta: si se queda en Safari, cree que ya está y se
+   pierde los avisos, que solo existen en la app instalada. Se marca en granate
+   lleno para que se lea distinto a los tres anteriores. */
+.hm-paso-clave .hm-paso-icono {
+  background: #5a3540;
+  border-color: #5a3540;
+  color: #efe6d8;
+  box-shadow: 0 10px 22px -10px rgba(58, 33, 40, .8);
+}
+.hm-paso-clave .hm-paso-texto { color: #38242b; }
+.hm-paso-clave .hm-paso-orden { color: #5a3540; }
+
 /* ── La campana ─────────────────────────────────────────────────────────── */
 
 .hm-campana {

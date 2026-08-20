@@ -63,6 +63,7 @@
     safari:    '<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>',
     ajustes:   '<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 00.32 1.77l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.6 1.6 0 00-1.77-.32 1.6 1.6 0 00-1 1.47V21a2 2 0 11-4 0v-.1a1.6 1.6 0 00-1.05-1.47 1.6 1.6 0 00-1.77.32l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.6 1.6 0 00.32-1.77 1.6 1.6 0 00-1.47-1H3a2 2 0 110-4h.1a1.6 1.6 0 001.47-1.05 1.6 1.6 0 00-.32-1.77l-.06-.06a2 2 0 112.83-2.83l.06.06a1.6 1.6 0 001.77.32H9a1.6 1.6 0 001-1.47V3a2 2 0 114 0v.1a1.6 1.6 0 001 1.47 1.6 1.6 0 001.77-.32l.06-.06a2 2 0 112.83 2.83l-.06.06a1.6 1.6 0 00-.32 1.77V9a1.6 1.6 0 001.47 1H21a2 2 0 110 4h-.1a1.6 1.6 0 00-1.47 1z"/></svg>',
     campana:   '<svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 10-12 0c0 6-2.5 7-2.5 7h17S18 14 18 8z"/><path d="M13.7 19a2 2 0 01-3.4 0"/></svg>',
+    abrir:     '<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="11" height="11" rx="3.2"/><path d="M17 3h4v4M21 3l-7.5 7.5"/><path d="M20 13v5.5A2.5 2.5 0 0117.5 21h-11A2.5 2.5 0 014 18.5v-11"/></svg>',
     punto:     '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>'
   };
 
@@ -99,8 +100,9 @@
       '<p class="hm-bajada hm-entra-3">' + bajada + '</p>';
   }
 
-  function paso(icono, orden, texto) {
-    return '<li class="hm-paso"><span class="hm-paso-icono">' + icono + '</span>' +
+  function paso(icono, orden, texto, destacado) {
+    return '<li class="hm-paso' + (destacado ? ' hm-paso-clave' : '') + '">' +
+      '<span class="hm-paso-icono">' + icono + '</span>' +
       '<span class="hm-paso-texto"><span class="hm-paso-orden">' + orden + '</span>' + texto + '</span></li>';
   }
 
@@ -140,12 +142,13 @@
         'Queda como una aplicación en tu pantalla de inicio. Se abre sin internet y no ocupa espacio.',
         'Club Huemul') +
       '<ul class="hm-pasos hm-entra-3">' +
-        paso(IC.compartir, 'Paso 1', 'Toca <b>Compartir</b>, abajo en el centro.') +
-        paso(IC.bajar,     'Paso 2', 'Baja por la lista de opciones.') +
-        paso(IC.agregar,   'Paso 3', 'Elige <b>Agregar a inicio</b>.') +
+        paso(IC.puntos,    'Paso 1', 'Toca <b>los tres puntos</b>, abajo a la derecha.') +
+        paso(IC.compartir, 'Paso 2', 'Elige <b>Compartir</b>.') +
+        paso(IC.agregar,   'Paso 3', 'Baja y elige <b>Agregar a inicio</b>.') +
+        paso(IC.abrir,     'Paso 4', 'Cierra Safari y <b>abre la tarjeta desde su ícono</b>. Aquí dentro no funciona.', true) +
       '</ul>' +
       '<div class="hm-abajo">' +
-        '<p class="hm-nota">Cuando la agregues, cierra esta pestaña y abre la tarjeta desde su ícono.</p>' +
+        '<p class="hm-nota">Si tu Safari muestra el ícono de compartir en la barra de abajo, tócalo directamente.</p>' +
         '<button class="hm-menor" id="hm-saltar" type="button">Ya la agregué</button>' +
       '</div>'
     );
