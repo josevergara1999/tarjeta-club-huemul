@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Del QR a la tarjeta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --ground:      #F7F5F2;
+    --surface:     #FFFFFF;
+    --surface-alt: #EFEAE2;
+    --ink:         #241B1E;
+    --ink-2:       #5C5054;
+    --ink-3:       #8A7D80;
+    --rule:        #DED6CD;
+    --rule-soft:   #E9E3DA;
+    --accent:      #6B383F;
+    --accent-soft: #A97B82;
+    --cream:       #D9D1C5;
+    --shadow:      0 1px 2px rgba(36,27,30,.05), 0 12px 32px -18px rgba(36,27,30,.28);
+
+    --serif: "Jost", ui-sans-serif, system-ui, sans-serif;
+    --sans:  "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --mono:  "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #171215;
+      --surface:     #1E181B;
+      --surface-alt: #241D21;
+      --ink:         #EDE7E1;
+      --ink-2:       #B6AAA9;
+      --ink-3:       #857A7B;
+      --rule:        #362C30;
+      --rule-soft:   #2A2226;
+      --accent:      #D9A0A8;
+      --accent-soft: #8E5A62;
+      --cream:       #4A3D3C;
+      --shadow:      0 1px 2px rgba(0,0,0,.4), 0 14px 34px -18px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:      #171215;
+    --surface:     #1E181B;
+    --surface-alt: #241D21;
+    --ink:         #EDE7E1;
+    --ink-2:       #B6AAA9;
+    --ink-3:       #857A7B;
+    --rule:        #362C30;
+    --rule-soft:   #2A2226;
+    --accent:      #D9A0A8;
+    --accent-soft: #8E5A62;
+    --cream:       #4A3D3C;
+    --shadow:      0 1px 2px rgba(0,0,0,.4), 0 14px 34px -18px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 16.5px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 28px 120px;
+  }
+
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:hover { color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  /* ─── Cabecera ─────────────────────────────────────────── */
+
+  header {
+    padding: 92px 0 46px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 8px;
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 22px;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(38px, 7vw, 62px);
+    line-height: 1.04;
+    letter-spacing: -.005em;
+    margin: 0 0 24px;
+    text-wrap: balance;
+  }
+  .standfirst {
+    max-width: 60ch;
+    font-size: 18.5px;
+    line-height: 1.6;
+    color: var(--ink-2);
+    margin: 0;
+    text-wrap: pretty;
+  }
+  .standfirst strong { color: var(--ink); font-weight: 500; }
+
+  /* ─── Secciones ────────────────────────────────────────── */
+
+  section { padding-top: 74px; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .19em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 0 0 10px;
+  }
+  h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(26px, 3.6vw, 34px);
+    line-height: 1.16;
+    margin: 0 0 14px;
+    text-wrap: balance;
+  }
+  .section-intro {
+    max-width: 62ch;
+    color: var(--ink-2);
+    margin: 0 0 40px;
+    text-wrap: pretty;
+  }
+
+  /* ─── El recorrido: rejilla de pasos ───────────────────── */
+
+  .steps { display: flex; flex-direction: column; }
+
+  .step {
+    display: grid;
+    grid-template-columns: 128px minmax(0, 1fr);
+    gap: 0 34px;
+    padding: 30px 0;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .step:first-child { border-top: 1px solid var(--rule); }
+
+  .step-mark { padding-top: 3px; }
+  .step-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    color: var(--accent);
+    display: block;
+  }
+  .step-where {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    display: block;
+    margin-top: 7px;
+    line-height: 1.5;
+  }
+
+  h3 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 21px;
+    line-height: 1.25;
+    margin: 0 0 10px;
+    letter-spacing: .002em;
+  }
+  .step p { margin: 0 0 12px; max-width: 60ch; color: var(--ink-2); text-wrap: pretty; }
+  .step p:last-child { margin-bottom: 0; }
+  .step strong { color: var(--ink); font-weight: 500; }
+
+  .sees {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin: 0 0 14px;
+    padding: 0;
+    list-style: none;
+    max-width: 60ch;
+  }
+  .sees li {
+    display: grid;
+    grid-template-columns: 78px minmax(0, 1fr);
+    gap: 14px;
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+  .sees .who {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    padding-top: 4px;
+  }
+
+  /* ─── Nota técnica ─────────────────────────────────────── */
+
+  .note {
+    margin: 16px 0 0;
+    padding: 15px 0 0;
+    border-top: 1px solid var(--rule);
+    max-width: 60ch;
+  }
+  .note-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .17em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .note p {
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.62;
+    color: var(--ink-2);
+    margin: 0;
+  }
+
+  /* ─── Reglas de iOS ────────────────────────────────────── */
+
+  .rules {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(268px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .rule-card {
+    background: var(--surface);
+    padding: 26px 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .rule-card h4 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 17.5px;
+    line-height: 1.3;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .rule-card p { margin: 0; font-size: 15px; line-height: 1.55; color: var(--ink-2); }
+  .rule-card .verdict {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: auto;
+    padding-top: 10px;
+  }
+
+  /* ─── Avisos ───────────────────────────────────────────── */
+
+  .table-scroll { overflow-x: auto; border: 1px solid var(--rule); }
+  table { border-collapse: collapse; width: 100%; min-width: 620px; background: var(--surface); }
+  th, td { text-align: left; padding: 14px 20px; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+  thead th {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    background: var(--surface-alt);
+    border-bottom: 1px solid var(--rule);
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td { font-size: 15.5px; line-height: 1.5; color: var(--ink-2); }
+  td:first-child { color: var(--ink); font-weight: 500; }
+  td .disparo { font-family: var(--mono); font-size: 13px; color: var(--ink-3); }
+
+  /* ─── Piezas por construir ─────────────────────────────── */
+
+  .pieces { display: flex; flex-direction: column; gap: 0; }
+  .piece {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 150px;
+    gap: 16px 34px;
+    padding: 22px 0;
+    border-top: 1px solid var(--rule-soft);
+    align-items: start;
+  }
+  .piece:first-child { border-top: 1px solid var(--rule); }
+  .piece h4 { font-family: var(--serif); font-weight: 500; font-size: 18px; margin: 0 0 7px; }
+  .piece p { margin: 0; color: var(--ink-2); font-size: 15.5px; line-height: 1.55; max-width: 58ch; }
+  .state {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+    padding-top: 4px;
+    text-align: right;
+    color: var(--ink-3);
+  }
+  .state.hecho { color: var(--accent); }
+
+  /* ─── Cierre ───────────────────────────────────────────── */
+
+  .closing {
+    margin-top: 22px;
+    padding: 30px 30px 32px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    box-shadow: var(--shadow);
+    max-width: 68ch;
+  }
+  .closing h4 { font-family: var(--serif); font-weight: 500; font-size: 19px; margin: 0 0 12px; }
+  .closing ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 9px; }
+  .closing li { color: var(--ink-2); }
+  .closing li strong { color: var(--ink); font-weight: 500; }
+
+  footer {
+    margin-top: 84px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .04em;
+    color: var(--ink-3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 26px;
+  }
+
+  @media (max-width: 720px) {
+    .wrap { padding: 0 20px 90px; }
+    header { padding-top: 60px; }
+    .step { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 26px 0; }
+    .step-mark { display: flex; gap: 14px; align-items: baseline; padding: 0 0 12px; }
+    .step-where { margin-top: 0; }
+    .sees li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+    .sees .who { padding-top: 0; }
+    .piece { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+    .state { text-align: left; padding-top: 0; }
+    .closing { padding: 24px 22px 26px; }
+  }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">Club Huemul · Estructura del alta</p>
+    <h1>Del QR a la tarjeta</h1>
+    <p class="standfirst">El recorrido completo de una persona que llega al restaurante, escanea un código y sale con la tarjeta instalada en su teléfono y las notificaciones activadas. <strong>El orden no es estético: cada paso desbloquea al siguiente</strong>, y tres reglas de iOS obligan a que sea exactamente este.</p>
+  </header>
+
+  <section>
+    <p class="section-label">01 — El recorrido</p>
+    <h2>Ocho momentos, en orden</h2>
+    <p class="section-intro">Todo ocurre de pie, en el mesón, con alguien esperando su mesa. Cada pantalla tiene un solo trabajo y un solo botón.</p>
+
+    <div class="steps">
+
+      <article class="step">
+        <div class="step-mark"><span class="step-num">00</span><span class="step-where">Mesón</span></div>
+        <div>
+          <h3>Escanea el código</h3>
+          <p>El QR de la mesa o del mesón abre la página en el navegador del teléfono. Es el único punto de entrada físico: <strong>el premio y el escaneo de sellos ocurren solo dentro del restaurante</strong>, en ningún otro lado.</p>
+          <p>Fuera del local hay una sola puerta más: el enlace en Instagram. Ese enlace tiene que abrir el navegador externo sí o sí, y la instrucción va escrita junto al link.</p>
+          <div class="note">
+            <span class="note-label">Por qué importa</span>
+            <p>El navegador interno de Instagram no tiene "Agregar a inicio". Si alguien entra por ahí, la página lo detecta y muestra una sola pantalla: cómo abrirla en Safari o Chrome. Sin eso, la persona se queda atascada y no hay tarjeta.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-mark"><span class="step-num">01</span><span class="step-where">Navegador</span></div>
+        <div>
+          <h3>Instalar la tarjeta como app</h3>
+          <p>Lo primero que se ve, antes que cualquier formulario. La guía cambia según el teléfono, con capturas reales y no texto:</p>
+          <ul class="sees">
+            <li><span class="who">iPhone</span><span>Compartir → bajar en la lista → Agregar a inicio.</span></li>
+            <li><span class="who">Android</span><span>Chrome ofrece un botón nativo de instalar. Un toque, sin tutorial.</span></li>
+            <li><span class="who">Otro</span><span>Si el navegador no permite instalar, se puede seguir igual: la tarjeta funciona, pero sin avisos.</span></li>
+          </ul>
+          <p>La página <strong>detecta sola</strong> si ya está instalada. No hace falta que la persona lo declare.</p>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-mark"><span class="step-num">02</span><span class="step-where">App instalada</span></div>
+        <div>
+          <h3>Cierra el navegador y abre el ícono</h3>
+          <p>Al abrirse desde el ícono, la app sabe que está instalada y <strong>no vuelve a mostrar el tutorial</strong>. Aquí muere el botón de "ya lo hice": si estuviera y alguien lo apretara dentro del navegador, se saltaría la instalación y todo lo que viene después se rompe.</p>
+          <p>Queda solo un enlace discreto, "ya la agregué", para el caso raro en que la detección falle.</p>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-mark"><span class="step-num">03</span><span class="step-where">App instalada</span></div>
+        <div>
+          <h3>La campana</h3>
+          <p>Pantalla completa, una campana grande, una frase que dice para qué sirve: enterarse primero de los eventos, las promociones y el regalo de cumpleaños. Dos botones: <strong>Activar</strong> y <strong>Ahora no</strong>.</p>
+          <div class="note">
+            <span class="note-label">La diferencia que salva el segundo intento</span>
+            <p>El cuadro real de iOS sale solo si toca Activar. Si toca Ahora no, el permiso del sistema queda intacto y se puede volver a pedir después. Si la primera campana disparara el cuadro real y la persona dijera que no, se acabó para siempre: iOS no deja preguntar otra vez.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-mark"><span class="step-num">04</span><span class="step-where">App instalada</span></div>
+        <div>
+          <h3>Sus datos y su tarjeta</h3>
+          <p>Nombre, correo y fecha de nacimiento. Después elige el diseño de su tarjeta entre los cinco, y ve la celebración con su nombre grabado.</p>
+          <p>La fecha de nacimiento no es un dato de relleno: es lo que dispara el descuento o el regalo de cumpleaños.</p>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-mark"><span class="step-num">05</span><span class="step-where">App instalada</span></div>
+        <div>
+          <h3>La campana otra vez, solo si hace falta</h3>
+          <p>Si ya activó en el paso 03, este paso no existe. Si dijo "Ahora no", aquí sale el cuadro real del sistema, ahora con la tarjeta ya en la mano y un motivo concreto para decir que sí.</p>
+          <p>Si el sistema ya lo denegó, la pantalla cambia sola: explica cómo reactivarlo desde Ajustes, sin bloquear nada.</p>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-mark"><span class="step-num">06</span><span class="step-where">Para siempre</span></div>
+        <div>
+          <h3>La tarjeta queda</h3>
+          <p>Desde ese momento, tocar el ícono lleva directo a la tarjeta. Sin login, sin volver a escribir nada, y <strong>abre sin señal</strong> dentro del restaurante, que es donde peor anda el wifi.</p>
+          <div class="note">
+            <span class="note-label">Dónde vive de verdad</span>
+            <p>El teléfono guarda solo la llave. Los sellos, los datos y el historial viven en el servidor. Si iOS limpia el almacenamiento, si cambia de teléfono o si borra el ícono sin querer, recupera su tarjeta con el correo. Si viviera solo en el teléfono, un día desaparecería sin remedio.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-mark"><span class="step-num">07</span><span class="step-where">Mesón</span></div>
+        <div>
+          <h3>La visita</h3>
+          <p>El equipo escanea el QR de la tarjeta desde el panel. El sello aparece en el teléfono de la persona ahí mismo, delante de ella, y le llega el aviso. Al completar la meta, el premio se canjea con el mismo gesto.</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <p class="section-label">02 — Restricciones</p>
+    <h2>Tres reglas de iOS que mandan sobre el diseño</h2>
+    <p class="section-intro">Ninguna es negociable ni se arregla programando mejor. El recorrido de arriba está ordenado así porque estas tres existen.</p>
+
+    <div class="rules">
+      <div class="rule-card">
+        <h4>Las notificaciones solo existen si la app está instalada</h4>
+        <p>Safari no permite avisos en una pestaña normal. Solo una página agregada a la pantalla de inicio puede pedir el permiso.</p>
+        <p class="verdict">Instalar va primero, y no es opcional</p>
+      </div>
+      <div class="rule-card">
+        <h4>El permiso se pide una sola vez</h4>
+        <p>Si sale el cuadro del sistema y la persona toca No permitir, no se puede volver a preguntar nunca. Solo se arregla entrando a Ajustes a mano.</p>
+        <p class="verdict">Por eso la campana pregunta antes de preguntar</p>
+      </div>
+      <div class="rule-card">
+        <h4>La app instalada tiene su propia memoria</h4>
+        <p>En iPhone, lo guardado en Safari no pasa a la app instalada. Registrarse en el navegador y después instalar deja la app vacía: parece que la tarjeta se perdió.</p>
+        <p class="verdict">Instalar antes de registrar evita ese susto</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <p class="section-label">03 — Los avisos</p>
+    <h2>Para qué sirve la campana</h2>
+    <p class="section-intro">Dos vienen solos del flujo. Los otros dos son el motivo real de pedir el permiso: poder hablarle a toda la base de socios cuando queramos.</p>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>Aviso</th><th>Qué dice</th><th>Cuándo sale</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Evento</td>
+            <td>"El lunes tenemos noche de…". Los socios se enteran antes que nadie, y ese es el argumento para tener la tarjeta.</td>
+            <td><span class="disparo">Lo escribe el equipo y lo manda</span></td>
+          </tr>
+          <tr>
+            <td>Promoción</td>
+            <td>Descuentos y ofertas puntuales, a todos los socios o a los de un programa.</td>
+            <td><span class="disparo">Lo escribe el equipo y lo manda</span></td>
+          </tr>
+          <tr>
+            <td>Cumpleaños</td>
+            <td>El regalo o descuento del día, con su nombre.</td>
+            <td><span class="disparo">Automático, por la fecha del paso 04</span></td>
+          </tr>
+          <tr>
+            <td>Sello y premio</td>
+            <td>"Sello registrado, te faltan 2" y "Tu premio está listo".</td>
+            <td><span class="disparo">Automático, al escanear en el mesón</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <p class="section-label">04 — Construcción</p>
+    <h2>Qué hay que levantar</h2>
+    <p class="section-intro">El prototipo ya publicado cubre las pantallas. Lo que falta es lo que las conecta con la realidad.</p>
+
+    <div class="pieces">
+      <div class="piece">
+        <div>
+          <h4>Las pantallas del recorrido</h4>
+          <p>Registro, selector, celebración y tarjeta con estampillas. Ya funcionan y están publicadas.</p>
+        </div>
+        <div class="state hecho">Hecho</div>
+      </div>
+      <div class="piece">
+        <div>
+          <h4>La app instalable</h4>
+          <p>Ícono propio, nombre, pantalla completa. Falta que funcione sin señal, que es lo que la vuelve confiable en el local.</p>
+        </div>
+        <div class="state">A medias</div>
+      </div>
+      <div class="piece">
+        <div>
+          <h4>Las pantallas nuevas del alta</h4>
+          <p>Detección de navegador interno, tutorial por plataforma, detección de app instalada y las dos campanas.</p>
+        </div>
+        <div class="state">Por hacer</div>
+      </div>
+      <div class="piece">
+        <div>
+          <h4>El servidor de socios</h4>
+          <p>Las tablas de fidelización que ya existen en la app de Inmersia, más la fecha de nacimiento y las suscripciones de aviso de cada teléfono.</p>
+        </div>
+        <div class="state">Por conectar</div>
+      </div>
+      <div class="piece">
+        <div>
+          <h4>El panel de avisos</h4>
+          <p>Escribir un aviso, elegir a quién y mandarlo. Más el envío de cumpleaños corriendo solo todos los días.</p>
+        </div>
+        <div class="state">Por hacer</div>
+      </div>
+    </div>
+
+    <div class="closing">
+      <h4>Lo que cuesta</h4>
+      <ol>
+        <li><strong>Los avisos son gratis.</strong> El envío a iPhone no pasa por la App Store ni necesita la cuenta de Apple de US$99 al año. Eso sigue siendo solo para la tarjeta en Apple Wallet, que es otra cosa y va después.</li>
+        <li><strong>El servidor sí.</strong> Antes del primer cliente real hay que subir Render al plan de US$7 al mes: el plan gratis se duerme a los 15 minutos, y un sello que no se registra delante del cliente es inaceptable.</li>
+        <li><strong>El permiso es el consentimiento.</strong> Quien activa la campana está aceptando recibir promociones. Conviene decirlo con esas palabras en la pantalla de la campana.</li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    <span>Club Huemul</span>
+    <span>Prototipo — 19 de agosto de 2026</span>
+    <span>Repositorio: tarjeta-club-huemul</span>
+  </footer>
+
+</div>
+</body>
+</html>
