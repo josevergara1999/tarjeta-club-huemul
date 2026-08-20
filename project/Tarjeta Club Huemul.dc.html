@@ -24,6 +24,7 @@ input[type="date"]{color-scheme:light}
 @keyframes hm-pop{0%{transform:scale(2.3) rotate(-16deg);opacity:0}55%{transform:scale(.9) rotate(3deg);opacity:1}100%{transform:scale(1) rotate(0deg);opacity:1}}
 @keyframes hm-glow{0%,100%{opacity:.65}50%{opacity:1}}
 @keyframes hm-fadeIn{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion: reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </helmet>
 <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px;box-sizing:border-box;background:radial-gradient(120% 100% at 50% 0%,#c3b9ab,#a99e8e)">
@@ -148,13 +149,6 @@ input[type="date"]{color-scheme:light}
         <div style="{{ homeCh.club }}">CLUB HUEMUL<div style="font-family:'Cormorant Garamond',serif;font-size:.98em;letter-spacing:.22em;text-transform:lowercase;margin-top:3px;opacity:.88">Fidelización</div></div>
         <span style="{{ homeEngrave }}">{{ holder }}</span>
         <div style="{{ homeShine }}"></div>
-        <sc-if value="{{ qr }}" hint-placeholder-val="{{ false }}">
-        <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:178px;padding:13px 13px 9px;box-sizing:border-box;background:rgba(242,235,221,.95);border:1px solid rgba(212,182,120,.85);border-radius:14px;box-shadow:inset 0 1px 4px rgba(58,33,40,.28), 0 12px 28px rgba(20,8,12,.5);animation:hm-fadeIn .4s both">
-          <span onClick="{{ qrClose }}" style="position:absolute;top:-11px;right:-11px;width:28px;height:28px;border-radius:50%;background:#4a2b33;color:#ece3d3;display:flex;align-items:center;justify-content:center;font-size:13px;font-family:Jost,sans-serif;cursor:pointer;box-shadow:0 4px 10px rgba(20,8,12,.5)">✕</span>
-          <canvas ref="{{ qrRef }}" width="220" height="220" style="width:150px;height:150px;display:block;border-radius:6px"></canvas>
-          <div style="font-family:Jost,sans-serif;font-size:8.5px;letter-spacing:2.2px;text-transform:uppercase;color:#6d5560;text-align:center;margin-top:7px">{{ qrLine }}</div>
-        </div>
-        </sc-if>
         <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.12),rgba(255,255,255,0) 40%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)"></div>
       </div>
       <div style="position:absolute;inset:0;border-radius:18px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:rotateY(180deg);background:linear-gradient(160deg,#4c2c35,#311a21);box-shadow:0 30px 56px -18px rgba(40,22,28,.5);display:flex;flex-direction:column;padding:22px;box-sizing:border-box">
@@ -188,11 +182,21 @@ input[type="date"]{color-scheme:light}
   </div>
   <div style="font-size:11px;font-weight:300;color:#8a7566;margin-top:14px;letter-spacing:.5px;animation:hm-fadeUp .6s .3s both">{{ flipHint }}</div>
   <div style="margin-top:auto;width:100%;display:flex;flex-direction:column;align-items:center;gap:12px;padding-bottom:4px">
-    <sc-if value="{{ demoScanOn }}" hint-placeholder-val="{{ false }}">
-      <button onClick="{{ simulateScan }}" style="padding:12px 30px;border-radius:999px;border:1px solid rgba(163,129,79,.8);background:transparent;color:#4a2b33;font-family:Jost,sans-serif;font-size:11.5px;letter-spacing:2.2px;text-transform:uppercase;cursor:pointer;animation:hm-fadeUp .4s both">Simular escáner</button>
-    </sc-if>
     <span onClick="{{ reset }}" style="font-size:10.5px;color:rgba(90,60,70,.5);text-decoration:underline;cursor:pointer">Reiniciar demo</span>
   </div>
+  <sc-if value="{{ qr }}" hint-placeholder-val="{{ false }}">
+  <div style="position:absolute;left:0;right:0;top:104px;height:452px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;z-index:60;animation:hm-fadeUp .55s cubic-bezier(.22,1,.36,1) both">
+    <div style="font-size:10.5px;letter-spacing:3px;text-transform:uppercase;color:#a3814f">Muestra el código al equipo</div>
+    <div style="background:rgba(246,241,230,.97);border:1px solid rgba(212,182,120,.85);border-radius:18px;padding:16px 16px 12px;box-shadow:0 22px 48px -18px rgba(58,33,40,.4), inset 0 1px 0 rgba(255,255,255,.7)">
+      <canvas ref="{{ qrRef }}" width="440" height="440" style="width:212px;height:212px;display:block;border-radius:8px"></canvas>
+      <div style="font-family:Jost,sans-serif;font-size:9px;letter-spacing:2.2px;text-transform:uppercase;color:#6d5560;text-align:center;margin-top:9px">{{ qrLine }}</div>
+    </div>
+    <sc-if value="{{ demoScanOn }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ simulateScan }}" style="margin-top:6px;padding:12px 30px;border-radius:999px;border:1px solid rgba(163,129,79,.8);background:transparent;color:#4a2b33;font-family:Jost,sans-serif;font-size:11.5px;letter-spacing:2.2px;text-transform:uppercase;cursor:pointer">Simular escáner</button>
+    </sc-if>
+    <span onClick="{{ qrClose }}" style="font-size:11px;color:rgba(90,60,70,.6);text-decoration:underline;cursor:pointer;letter-spacing:.5px">Retirar tarjeta</span>
+  </div>
+  </sc-if>
   <div style="position:absolute;left:0;right:0;bottom:0;height:112px;background:linear-gradient(180deg,#3a2128,#2a161c);border-radius:30px 30px 0 0;box-shadow:0 -16px 40px rgba(43,23,29,.35);display:flex;flex-direction:column;align-items:center;padding-top:22px;box-sizing:border-box;z-index:140">
     <div style="{{ vSlotStyle }}"></div>
     <div style="margin-top:16px;font-size:10.5px;letter-spacing:2.4px;text-transform:uppercase;color:rgba(236,227,211,.68);text-align:center;padding:0 20px">{{ vDockLabel }}</div>
@@ -291,15 +295,32 @@ class Component extends DCLogic {
   insertVisit() {
     if (!this.state.vCopy) return;
     this.setState({ vPhase: 'in', vDragging: false, vAnim: 'in' });
-    setTimeout(() => this.setState({ vAnim: 'out', vPhase: 'out' }), 720);
-    setTimeout(() => this.setState({ vPhase: null, vAnim: null, vCopy: null, vdy: 0, qr: true }), 1620);
+    setTimeout(() => this.setState({ vPhase: 'seated', vAnim: 'seated', qr: true }), this._prm ? 40 : 640);
+  }
+  reseatCard() {
+    if (!this.state.vCopy || this.state.vPhase !== 'seated') return;
+    try {
+      const cr = this.cardWrapRef.current.getBoundingClientRect();
+      const rr = this.homeRef.current.getBoundingClientRect();
+      this._vRootH = rr.height;
+      const x = cr.left - rr.left, y = cr.top - rr.top;
+      const dIn = (rr.height - 84) - cr.height * 0.5 - y;
+      this.setState({ vCopy: { x, y, dIn, dOut: 0 } });
+    } catch (e) {}
+  }
+  ejectCard(after) {
+    cancelAnimationFrame(this._qra);
+    if (!this.state.vCopy) { this.setState({ qr: false }); if (after) after(); return; }
+    this.setState({ qr: false, vPhase: 'eject', vAnim: 'eject' });
+    setTimeout(() => { this.setState({ vPhase: null, vAnim: null, vCopy: null, vdy: 0 }); if (after) after(); }, this._prm ? 40 : 680);
   }
   simulateScan() {
-    this.setState({ qr: false });
-    setTimeout(() => {
+    if (this._scanBusy) return; this._scanBusy = true;
+    this.ejectCard(() => {
+      this._scanBusy = false;
       if (this.state.stamps >= this.req()) this.setState({ reward: true });
       else this.addStamp();
-    }, 260);
+    });
   }
   drawQR(tries) {
     const cv = this.qrRef.current;
@@ -315,9 +336,12 @@ class Component extends DCLogic {
     oc.fillStyle = '#f6f1e6'; oc.fillRect(0, 0, 220, 220);
     oc.imageSmoothingEnabled = false;
     oc.drawImage(qi, 6, 6, 208, 208);
-    // grabado línea por línea
+    // grabado línea por línea (lienzo 440 = 2x para nitidez)
     const ctx = cv.getContext('2d');
+    ctx.setTransform(2, 0, 0, 2, 0, 0);
+    ctx.imageSmoothingEnabled = false;
     cancelAnimationFrame(this._qra);
+    if (this._prm) { ctx.fillStyle = '#f6f1e6'; ctx.fillRect(0, 0, 220, 220); ctx.drawImage(o, 0, 0); return; }
     const t0 = performance.now(), dur = 1350;
     const tick = t => {
       const p = Math.min(1, (t - t0) / dur);
@@ -350,6 +374,9 @@ class Component extends DCLogic {
   req() { return Math.min(8, Math.max(3, this.props.requiredStamps ?? 5)); }
 
   componentDidMount() {
+    try { this._prm = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { this._prm = false; }
+    this._vrs = () => this.reseatCard();
+    window.addEventListener('resize', this._vrs);
     this.cards.forEach(c => { const im = new Image(); im.src = c.img; });
     this._qrImg = new Image(); this._qrImg.src = 'assets/qr-real.png';
     try {
@@ -357,7 +384,7 @@ class Component extends DCLogic {
       if (s && s.done) this.setState({ phase: 'home', sel: s.sel || 0, name: s.name || '', email: s.email || '', dob: s.dob || '', stamps: Math.min(s.stamps || 0, this.req()) });
     } catch (e) {}
   }
-  componentWillUnmount() { this.rmListeners(); cancelAnimationFrame(this._cf); cancelAnimationFrame(this._qra); }
+  componentWillUnmount() { this.rmListeners(); if (this._vrs) window.removeEventListener('resize', this._vrs); cancelAnimationFrame(this._cf); cancelAnimationFrame(this._qra); }
 
   persist(extra) {
     const { sel, name, email, dob, stamps } = this.state;
@@ -698,34 +725,34 @@ class Component extends DCLogic {
       chosenEngraveStyle: this.engrave(chosen.light, 13),
       toHome: () => { this.persist(); this.setState({ phase: 'home', flipped: false }); },
       memberLine: holder ? 'Miembro · ' + holder : 'Miembro',
-      flip: () => { if (this._vMoved || s.qr) return; this.setState({ flipped: !s.flipped }); },
+      flip: () => { if (this._vMoved || s.qr || s.vCopy) return; this.setState({ flipped: !s.flipped }); },
       homeRef: this.homeRef, cardWrapRef: this.cardWrapRef, qrRef: this.qrRef,
       vCopyOn: !!s.vCopy,
       vClipStyle: { position: 'absolute', left: 0, right: 0, top: 0, height: (this._vRootH || 874) - 84, overflow: 'hidden', zIndex: 150, pointerEvents: 'none' },
       vCardStyle: (() => {
         const vc = s.vCopy; if (!vc) return { display: 'none' };
-        const tr = s.vAnim === 'in' ? 'translateY(' + vc.dIn + 'px) scale(.97)'
-          : (s.vAnim === 'out' || s.vAnim === 'back') ? 'translateY(0px) scale(1)'
+        const tr = (s.vAnim === 'in' || s.vAnim === 'seated') ? 'translateY(' + vc.dIn + 'px) scale(.97)'
+          : (s.vAnim === 'eject' || s.vAnim === 'back') ? 'translateY(0px) scale(1)'
           : 'translateY(' + s.vdy + 'px) scale(' + (1 - Math.min(s.vdy / 900, 0.07)) + ')';
         return {
           position: 'absolute', left: vc.x, top: vc.y, width: 250, height: 408, borderRadius: 18,
           backgroundImage: 'url("' + chosen.img + '")', backgroundSize: 'cover', backgroundPosition: 'center',
           overflow: 'hidden', boxShadow: '0 30px 56px -18px rgba(40,22,28,.5)',
           transform: tr,
-          transition: s.vDragging ? 'none' : s.vAnim === 'in' ? 'transform .58s cubic-bezier(.5,.05,.6,.9)' : s.vAnim === 'out' ? 'transform .85s cubic-bezier(.2,1.5,.35,1)' : s.vAnim === 'back' ? 'transform .5s cubic-bezier(.22,1,.36,1)' : 'none',
+          transition: s.vDragging ? 'none' : s.vAnim === 'in' ? 'transform .62s cubic-bezier(.3,.72,.25,1.06)' : s.vAnim === 'eject' ? 'transform .65s cubic-bezier(.22,1,.36,1)' : s.vAnim === 'back' ? 'transform .5s cubic-bezier(.22,1,.36,1)' : 'none',
         };
       })(),
       vCh: this.chrome(chosen, 1.21),
       vEngrave: this.engrave(chosen.light, 13),
       visitDown: e => this.startVisitDrag(e),
       qr: s.qr,
-      qrClose: e => { e.stopPropagation(); cancelAnimationFrame(this._qra); this.setState({ qr: false }); },
+      qrClose: e => { e.stopPropagation(); this.ejectCard(); },
       demoScanOn: s.qr && (this.props.showDemo ?? true),
       simulateScan: () => this.simulateScan(),
       qrLine: 'visita ' + Math.min(s.stamps + 1, req) + ' de ' + req + (holder ? ' · ' + holder : ''),
       vDockLabel: (() => {
         const vglow = s.vDragging ? Math.min(s.vdy / 170, 1) : 0;
-        return s.vPhase === 'in' ? 'Leyendo tarjeta…' : s.vPhase === 'out' ? 'Grabando código…' : s.qr ? 'Esperando escáner' : (s.vDragging && vglow >= 1) ? 'Suelta para escanear' : 'Arrastra tu tarjeta para registrar tu visita';
+        return s.vPhase === 'in' ? 'Leyendo tarjeta…' : s.vPhase === 'seated' ? 'Tarjeta en el lector · esperando escáner' : s.vPhase === 'eject' ? 'Retirando tarjeta…' : (s.vDragging && vglow >= 1) ? 'Suelta para escanear' : 'Arrastra tu tarjeta para registrar tu visita';
       })(),
       vSlotStyle: (() => {
         const vglow = s.vDragging ? Math.min(s.vdy / 170, 1) : s.vPhase ? 1 : 0;
@@ -751,7 +778,7 @@ class Component extends DCLogic {
       },
       progressLine: s.stamps >= req ? 'Colección completa — postre de regalo' : s.stamps + ' de ' + req + ' visitas',
       holderCaps: (holder || 'Miembro').toUpperCase(),
-      flipHint: s.qr ? 'Código grabado en tu tarjeta · acércala al escáner' : s.flipped ? 'Toca para ver el frente' : 'Toca la tarjeta para ver tus estampillas',
+      flipHint: s.vCopy ? '' : s.flipped ? 'Toca para ver el frente' : 'Toca la tarjeta para ver tus estampillas',
       demoOn: this.props.showDemo ?? true,
       addStamp: () => this.addStamp(),
       stampBtnStyle: {
