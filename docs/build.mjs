@@ -51,6 +51,11 @@ for (const n of [1, 2, 3, 4, 5]) {
 
 // 3. El runtime del diseño espera React, ReactDOM y Babel en window, y busca
 //    los archivos importados en __resourceBlobs antes de salir a la red.
+// La capa de alta (lo previo a la tarjeta) vive en alta/, fuera del diseno, y se
+// mete aqui dentro. Asi `project/` se puede volver a exportar desde Claude Design
+// sin llevarse por delante estas pantallas.
+const ALTA = P + '/../alta'
+const alta = n => readFileSync(ALTA + '/' + n, 'utf8')
 const lib  = n => readFileSync(SC + '/lib/' + n, 'utf8')
 const jsx  = readFileSync(P + '/ios-frame.jsx', 'utf8')
 const supp = readFileSync(P + '/support.js', 'utf8')
@@ -103,8 +108,16 @@ const cabeza = [
     JSON.stringify(jsx) + '],{type:"text/jsx"})};</script>',
   '<script>' + supp + '</script>',
   '<style>' + CSS_MOVIL + '</style>',
+  // Las fuentes del diseno tambien aqui: la capa de alta se pinta antes de que
+  // arranque el diseno, y sin esto sus primeras pantallas salen con otra letra.
+  '<link rel="preconnect" href="https://fonts.googleapis.com">',
+  '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
+  '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap">',
+  '<style>' + alta('alta.css') + '</style>',
 ].join('\n')
 
 const out = SC + '/index.html'
-writeFileSync(out, cabeza + '\n' + doc + '\n')
+// El guion va al FINAL, despues del diseno: observa sus pantallas para saber
+// cuando termino la inscripcion.
+writeFileSync(out, cabeza + '\n' + doc + '\n' + '<script>' + alta('alta.js') + '</script>' + '\n')
 console.log('\n' + basename(out) + '  ' + Math.round(readFileSync(out).length / 1024) + ' KB')

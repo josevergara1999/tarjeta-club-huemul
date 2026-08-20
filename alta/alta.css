@@ -1,0 +1,284 @@
+/* ============================================================================
+   LA PUERTA DE ENTRADA — pantallas previas a la tarjeta
+   ============================================================================
+   Todo lo que pasa ANTES de que la persona vea el diseño: sacarla del navegador
+   de Instagram, enseñarle a instalar, y pedirle los avisos.
+
+   Vive aparte del diseño a propósito. `project/` es lo que sale de Claude Design
+   y se puede volver a exportar en cualquier momento; si estas pantallas
+   estuvieran ahí dentro, la próxima exportación se las llevaría por delante.
+
+   Los colores y las tipografías son los MISMOS del diseño, copiados a mano, para
+   que la costura entre esta capa y la tarjeta no se note.
+   ========================================================================== */
+
+.hm-alta {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background: radial-gradient(140% 90% at 50% 6%, #d9d1c5 0%, #cbc2b6 55%, #bcb1a2 100%);
+  font-family: Jost, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: #6d6157;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow-y: auto;
+}
+.hm-alta[hidden] { display: none; }
+
+/* En computador no ocupa toda la ventana: se queda en una columna del ancho de
+   un teléfono, que es el único sitio donde esto tiene sentido. */
+.hm-lienzo {
+  width: 100%;
+  max-width: 402px;
+  min-height: 100%;
+  padding: calc(64px + env(safe-area-inset-top)) 34px calc(38px + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+@media (min-width: 821px) {
+  .hm-alta { align-items: center; padding: 28px 0; }
+  .hm-lienzo {
+    min-height: 0;
+    height: 874px;
+    max-height: 100%;
+    border-radius: 34px;
+    background: radial-gradient(140% 90% at 50% 6%, #d9d1c5 0%, #cbc2b6 55%, #bcb1a2 100%);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, .18), 0 0 0 1px rgba(0, 0, 0, .1);
+    padding-top: 64px;
+  }
+}
+
+/* ── Piezas ─────────────────────────────────────────────────────────────── */
+
+.hm-logo {
+  width: 58px;
+  height: 58px;
+  flex: none;
+  background: #5a3540;
+  color: #efe6d8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  border-radius: 2px;
+  box-shadow: 0 12px 28px rgba(58, 33, 40, .28);
+}
+.hm-logo span { padding-left: 2.5px; }
+
+.hm-titulo {
+  font-weight: 300;
+  font-size: 25px;
+  line-height: 1.22;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #38242b;
+  margin: 26px 0 0;
+  text-wrap: balance;
+}
+.hm-bajada {
+  font-size: 14.5px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: #6d6157;
+  margin: 14px 0 0;
+  max-width: 30ch;
+  text-wrap: pretty;
+}
+.hm-eyebrow {
+  font-size: 11px;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: #8a7566;
+  margin: 8px 0 0;
+}
+
+.hm-abajo { margin-top: auto; padding-top: 32px; }
+
+.hm-boton {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 54px;
+  border: none;
+  border-radius: 999px;
+  background: #5a3540;
+  color: #efe6d8;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 14px 30px -12px rgba(58, 33, 40, .7);
+  transition: transform .18s cubic-bezier(.2, .9, .3, 1), background-color .18s;
+}
+.hm-boton:hover { background: #4a2b34; }
+.hm-boton:active { transform: scale(.985); }
+
+.hm-boton-2 {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 10px;
+  border: none;
+  background: transparent;
+  color: #7d6f63;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.hm-boton-2:hover { color: #38242b; }
+
+.hm-menor {
+  display: block;
+  width: 100%;
+  margin-top: 18px;
+  padding: 8px 0;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 300;
+  color: rgba(109, 97, 87, .7);
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.hm-menor:hover { color: #38242b; }
+
+:where(.hm-alta) :focus-visible {
+  outline: 2px solid #5a3540;
+  outline-offset: 3px;
+}
+
+/* ── Los pasos del tutorial ─────────────────────────────────────────────── */
+
+.hm-pasos {
+  list-style: none;
+  margin: 30px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.hm-paso {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+}
+.hm-paso-icono {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: rgba(90, 53, 64, .07);
+  border: 1px solid rgba(90, 53, 64, .13);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #5a3540;
+}
+.hm-paso-icono svg { display: block; }
+.hm-paso-texto { font-size: 14.5px; font-weight: 300; line-height: 1.45; color: #4a3138; }
+.hm-paso-texto b { font-weight: 500; color: #38242b; }
+.hm-paso-orden {
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: #9c8b7c;
+  display: block;
+  margin-bottom: 3px;
+}
+
+/* ── La campana ─────────────────────────────────────────────────────────── */
+
+.hm-campana {
+  width: 108px;
+  height: 108px;
+  margin: 34px auto 0;
+  border-radius: 50%;
+  background: #5a3540;
+  color: #efe6d8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 22px 44px -14px rgba(58, 33, 40, .62);
+  position: relative;
+}
+.hm-campana::after {
+  content: "";
+  position: absolute;
+  inset: -16px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(90, 53, 64, .22), rgba(90, 53, 64, 0));
+  animation: hm-latido 2.8s ease-in-out infinite;
+}
+.hm-centrado { text-align: center; }
+.hm-centrado .hm-bajada { margin-left: auto; margin-right: auto; }
+
+.hm-lista {
+  list-style: none;
+  margin: 26px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  text-align: left;
+}
+.hm-lista li {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: #6d6157;
+}
+.hm-lista svg { margin-top: 4px; color: #a3814f; }
+
+.hm-nota {
+  font-size: 11.5px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: rgba(109, 97, 87, .72);
+  margin: 14px 0 0;
+  text-align: center;
+}
+
+/* ── Animaciones ────────────────────────────────────────────────────────── */
+
+.hm-entra { animation: hm-sube .55s cubic-bezier(.22, 1, .36, 1) both; }
+.hm-entra-2 { animation: hm-sube .55s .07s cubic-bezier(.22, 1, .36, 1) both; }
+.hm-entra-3 { animation: hm-sube .55s .14s cubic-bezier(.22, 1, .36, 1) both; }
+
+@keyframes hm-sube {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes hm-latido {
+  0%, 100% { opacity: .5; transform: scale(1); }
+  50%      { opacity: 1;  transform: scale(1.06); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hm-entra, .hm-entra-2, .hm-entra-3 { animation: none; }
+  .hm-campana::after { animation: none; }
+  .hm-boton { transition: none; }
+}

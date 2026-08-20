@@ -23,5 +23,11 @@ Para regenerarlo hace falta node, ImageMagick y bajar tres librerías:
 Del diseño solo se cambian las rutas de las imágenes por la imagen misma. Ni una
 línea de layout, color o lógica.
 
+Lo que sí es código nuevo vive en `../alta/`: las pantallas previas a la tarjeta
+(navegador de Instagram, tutorial de instalación, las dos campanas) y el
+trabajador de servicio. Está fuera de `project/` para que una nueva exportación
+desde Claude Design no se lo lleve por delante. `sw.js` se copia a mano a esta
+carpeta; el resto lo mete `build.mjs` dentro del `index.html`.
+
 GitHub Pages sirve esta carpeta tal cual: cada `git push` a `main` actualiza
 https://josevergara1999.github.io/tarjeta-club-huemul/ en un par de minutos.
