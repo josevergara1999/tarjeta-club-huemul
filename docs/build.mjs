@@ -66,6 +66,19 @@ const supp = readFileSync(P + '/support.js', 'utf8')
 // del contenedor y ocupa todo, y se esconden isla, barra de estado e indicador.
 // Solo afecta a la presentacion: el diseno de project/ no cambia.
 const CSS_MOVIL = `
+/* LA FRANJA DE ARRIBA. Con la barra transparente, la hora y la bateria salen
+   siempre BLANCAS: sobre el crema no se leerian. Asi que ese trozo se pinta del
+   granate de la marca y la hora queda encima, legible, como cabecera de app.
+   Fuera del telefono el margen seguro mide 0 y esta franja no existe. */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: env(safe-area-inset-top);
+  background: #5a3540;
+  z-index: 9500;
+  pointer-events: none;
+}
 @media (max-width: 820px) {
   html, body { overflow: hidden; }
   /* Las franjas fuera del area segura toman el fondo del lienzo, que sale del
@@ -75,6 +88,8 @@ const CSS_MOVIL = `
     position: fixed !important; inset: 0 !important;
     width: auto !important; height: auto !important;
     border-radius: 0 !important; box-shadow: none !important;
+    padding-top: env(safe-area-inset-top) !important;
+    box-sizing: border-box !important;
   }
   [data-om-starter="ios-frame"] > div:nth-child(1),
   [data-om-starter="ios-frame"] > div:nth-child(2),
@@ -89,14 +104,14 @@ const cabeza = [
   // Tan imprescindible como el charset, y por el mismo motivo: venia en el <head>
   // original. Sin ella Safari maqueta a 980px de ancho y luego encoge la pagina,
   // asi que la regla de movil de abajo no llega a aplicarse nunca.
-  '<meta name="viewport" content="width=device-width, initial-scale=1">',
+  '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
   '<title>Tarjeta Club Huemul</title>',
   // Instalada en el telefono, iOS pinta las franjas del notch y del indicador de
   // home con el color de fondo del documento. Sin declararlo salian BLANCAS,
   // cortando el crema del diseno por arriba y por abajo.
-  '<meta name="theme-color" content="#d9d1c5">',
+  '<meta name="theme-color" content="#5a3540">',
   '<meta name="apple-mobile-web-app-capable" content="yes">',
-  '<meta name="apple-mobile-web-app-status-bar-style" content="default">',
+  '<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">',
   '<meta name="apple-mobile-web-app-title" content="Club Huemul">',
   '<link rel="manifest" href="manifest.webmanifest">',
   '<link rel="apple-touch-icon" href="apple-touch-icon.png">',
